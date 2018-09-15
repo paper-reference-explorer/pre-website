@@ -9,6 +9,11 @@ html {
     box-sizing: inherit;
 }
 
+body {
+    width: 100vw;
+    height: 100vh;
+}
+
 .grid-container {
     display: grid;
     height: 100%;
@@ -37,4 +42,6 @@ html {
     grid-template-rows: 1fr 1fr;
     grid-gap: 1px;
     grid-template-areas: ". ." ". .";
+
+    overflow: auto;
 }
