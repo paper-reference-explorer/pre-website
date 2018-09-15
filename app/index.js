@@ -1,10 +1,5 @@
-/**
- * Application entry point
- */
-
-// Load application styles
 import 'styles/index.scss';
+import * as data from './data.json';
+import $ from "jquery";
 
-// ================================
-// START YOUR APP HERE
-// ================================
+console.log(data.sections);
