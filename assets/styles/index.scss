@@ -1,54 +1,61 @@
-// Apply a natural box layout model to all elements
-// but allowing components to change
-// http://www.paulirish.com/2012/box-sizing-border-box-ftw/
+$background-color: #00000010;
+$margin: 5px;
+$grid-gap: 10px;
+
 html {
     box-sizing: border-box;
 }
 
 *, *:before, *:after {
     box-sizing: inherit;
+    margin: $margin;
 }
 
 body {
-    width: 100vw;
-    height: 100vh;
+    max-width: 1500px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .grid-container {
     display: grid;
-    height: 100%;
     grid-template-columns: 1fr 300px;
-    grid-template-rows: 100px 200px 1fr;
-    grid-gap: 10px;
+    grid-template-rows: 100px 200px max-content;
+    grid-gap: $grid-gap;
     grid-template-areas: "header header" "visualization selection-info" "visualization user-papers";
+    height: calc(100vh - 2 * #{$margin} - #{$grid-gap});
 }
 
 .header {
     grid-area: header;
+    background-color: $background-color;
 }
 
 .selection-info {
     grid-area: selection-info;
+    background-color: $background-color;
 }
 
 .user-papers {
     grid-area: user-papers;
+    background-color: $background-color;
 }
 
 .visualization {
-    display: grid;
     grid-area: visualization;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    grid-gap: 1px;
-    grid-template-areas: ". ." ". .";
+    background-color: $background-color;
+}
 
-    overflow: auto;
+svg {
+    margin: 0;
 }
 
 line {
-    fill: none;
     stroke: #000;
-    shape-rendering: crispEdges;
-    stroke-width: 1px;
+    stroke-width: 0.5px;
+}
+
+text {
+    font-family: Roboto, sans-serif;
+    font-size: 6px;
 }
