@@ -1,0 +1,12 @@
+{
+  "name": "paper-references-explorer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:OndragKlaus/paper-references-explorer.git",
+  "author": "OndragKlaus <OndragKlaus@users.noreply.github.com>",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "http-server": "^0.11.1",
+    "livereload": "^0.7.0"
+  }
+}
