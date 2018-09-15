@@ -14,7 +14,7 @@
     "url": "git@github.com:OndragKlaus/paper-references-explorer.git"
   },
   "dependencies": {
-    "jquery": "^3.3.1",
+    "d3": "^5.7.0",
     "lodash": "4.17.10"
   },
   "devDependencies": {
