@@ -14,9 +14,16 @@ svgSelection.attr("height", totalHeight.toString() + "px");
 
 for (var index = 0; index < nSections; index++) {
     // data.sections[index]
+    var offset = rowHeight * index;
     svgSelection.append("circle")
         .attr("cx", 25)
-        .attr("cy", 25 + rowHeight * index)
+        .attr("cy", 25 + offset)
         .attr("r", 25)
         .style("fill", "purple");
+
+    svgSelection.append("line")
+        .attr("x1", 0)
+        .attr("x2", 100)
+        .attr("y1", offset)
+        .attr("y2", offset)
 }
