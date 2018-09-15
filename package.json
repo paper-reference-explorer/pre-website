@@ -1,12 +1,16 @@
 {
   "name": "paper-references-explorer",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "git@github.com:OndragKlaus/paper-references-explorer.git",
   "author": "OndragKlaus <OndragKlaus@users.noreply.github.com>",
   "license": "GPL-3.0",
+  "private": true,
   "devDependencies": {
     "http-server": "^0.11.1",
-    "livereload": "^0.7.0"
+    "livereload": "^0.7.0",
+    "webpack": "^4.19.0"
+  },
+  "dependencies": {
+    "jquery": "^3.3.1"
   }
 }
