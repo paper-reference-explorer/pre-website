@@ -4,6 +4,37 @@
 html {
     box-sizing: border-box;
 }
+
 *, *:before, *:after {
     box-sizing: inherit;
+}
+
+.grid-container {
+    display: grid;
+    height: 100%;
+    grid-template-columns: 1fr 300px;
+    grid-template-rows: 100px 200px 1fr;
+    grid-gap: 10px;
+    grid-template-areas: "header header" "visualization selection-info" "visualization user-papers";
+}
+
+.header {
+    grid-area: header;
+}
+
+.selection-info {
+    grid-area: selection-info;
+}
+
+.user-papers {
+    grid-area: user-papers;
+}
+
+.visualization {
+    display: grid;
+    grid-area: visualization;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    grid-gap: 1px;
+    grid-template-areas: ". ." ". .";
 }
