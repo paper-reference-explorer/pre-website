@@ -9,6 +9,7 @@ html {
 *, *:before, *:after {
     box-sizing: inherit;
     margin: $margin;
+    font-family: Roboto, sans-serif;
 }
 
 body {
@@ -52,10 +53,13 @@ svg {
 
 line {
     stroke: #000;
-    stroke-width: 0.5px;
+    stroke-width: 0.05px;
 }
 
-text {
-    font-family: Roboto, sans-serif;
-    font-size: 6px;
+text.section {
+    font-size: 4px;
+}
+
+text.paper-label {
+    font-size: 1.5px;
 }
