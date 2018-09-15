@@ -44,15 +44,16 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                     var paper = section[paperKey];
 
                     var g = svgSelection.append("g");
+                    var x = ((paperIndex + 1) / (nPapersInSection + 1) * 100).toString() + "%";
                     g.append("circle")
-                        .attr("cx", "50%")
+                        .attr("cx", x)
                         .attr("cy", offset + sectionHeight / 2)
                         .attr("r", 5)
                         .style("fill", "purple");
 
                     g.append("text")
                         .attr("class", "paper-label")
-                        .attr("x", "50%")
+                        .attr("x", x)
                         .attr("y", offset + sectionHeight / 2)
                         .attr("text-anchor", "middle")
                         .attr("dominant-baseline", "middle")
