@@ -74,3 +74,7 @@ typings/
 
 # Jetbrains folder
 .idea
+
+# Directories
+log/
+dist/

@@ -1,16 +1,38 @@
 {
   "name": "paper-references-explorer",
   "version": "1.0.0",
-  "repository": "git@github.com:OndragKlaus/paper-references-explorer.git",
+  "description": "",
   "author": "OndragKlaus <OndragKlaus@users.noreply.github.com>",
   "license": "GPL-3.0",
-  "private": true,
-  "devDependencies": {
-    "http-server": "^0.11.1",
-    "livereload": "^0.7.0",
-    "webpack": "^4.19.0"
+  "homepage": "https://www.github.com:OndragKlaus/paper-references-explorer",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=dev webpack-dev-server --progress --mode development --config webpack.config.dev.js",
+    "build": "webpack -p --progress --mode production --config webpack.config.build.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:OndragKlaus/paper-references-explorer.git"
   },
   "dependencies": {
-    "jquery": "^3.3.1"
+    "lodash": "4.17.10"
+  },
+  "devDependencies": {
+    "@babel/core": "7.0.0",
+    "babel-loader": "8.0.2",
+    "babel-plugin-syntax-dynamic-import": "6.18.0",
+    "babel-preset-env": "1.7.0",
+    "clean-webpack-plugin": "0.1.19",
+    "cross-env": "5.2.0",
+    "css-loader": "1.0.0",
+    "file-loader": "2.0.0",
+    "html-webpack-plugin": "3.2.0",
+    "node-sass": "4.9.3",
+    "sass-loader": "7.1.0",
+    "style-loader": "0.23.0",
+    "url-loader": "1.1.1",
+    "webpack": "4.17.2",
+    "webpack-cli": "3.1.0",
+    "webpack-dev-server": "3.1.8",
+    "webpack-merge": "4.1.4"
   }
 }
