@@ -99,11 +99,10 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                 if (section.hasOwnProperty(paperKey)) {
                     var paper = section[paperKey];
 
-                    var g = svgSelection.append("g");
+                    var g = svgSelection.append("g")
+                        .data([paper]);
                     var x = ((paperIndex + 1) / (nPapersInSection + 1) * 100).toString() + "%";
                     var y = offset + sectionHeight / 2;
-                    var radius = logslider(paper["referenced-n-times-global"], meta["maximumReferencedGlobal"]);
-                    var backgroundColor = colorPalette[paper["referenced-n-times-local"]];
 
                     g.append("circle")
                         .attr("cx", x)
@@ -112,8 +111,12 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                         .style("fill", startColor)
                         .transition()
                         .duration(transitionTime)
-                        .attr("r", radius)
-                        .style("fill", backgroundColor);
+                        .attr("r", function(p) {
+                            return logslider(p["referenced-n-times-global"], meta["maximumReferencedGlobal"])
+                        })
+                        .style("fill", function(p) {
+                            return colorPalette[p["referenced-n-times-local"]];
+                        });
 
                     g.append("text")
                         .attr("class", "paper-label")
