@@ -63,3 +63,12 @@ text.section {
 text.paper-label {
     font-size: 1.5px;
 }
+
+div.tooltip {
+    position: absolute;
+    padding: 10px;
+    background: lightsteelblue;
+    border: 0;
+    border-radius: 8px;
+    pointer-events: none;
+}

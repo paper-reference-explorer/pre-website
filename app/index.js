@@ -73,6 +73,10 @@ var startFontSize = 0;
 var startColor = colorPalette[0];
 console.log(colorPalette);
 
+var div = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("opacity", 0);
+
 for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
     var sectionWrapper = data[sectionIndex];
     for (var sectionKey in sectionWrapper) {
@@ -98,11 +102,26 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
             for (var paperKey in section) {
                 if (section.hasOwnProperty(paperKey)) {
                     var paper = section[paperKey];
-
-                    var g = svgSelection.append("g")
-                        .data([paper]);
                     var x = ((paperIndex + 1) / (nPapersInSection + 1) * 100).toString() + "%";
                     var y = offset + sectionHeight / 2;
+
+                    var g = svgSelection.append("g")
+                        .data([paper])
+                        .on("mouseover", function (p) {
+                            div.transition()
+                                .duration(200)
+                                .style("opacity", .9);
+                            div.html(
+                                p["authors"] + " \"" + p["title"] + "\""
+                            )
+                                .style("left", (d3.event.pageX) + "px")
+                                .style("top", (d3.event.pageY - 28) + "px");
+                        })
+                        .on("mouseout", function (d) {
+                            div.transition()
+                                .duration(500)
+                                .style("opacity", 0);
+                        });
 
                     g.append("circle")
                         .attr("cx", x)
@@ -111,10 +130,10 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                         .style("fill", startColor)
                         .transition()
                         .duration(transitionTime)
-                        .attr("r", function(p) {
+                        .attr("r", function (p) {
                             return logslider(p["referenced-n-times-global"], meta["maximumReferencedGlobal"])
                         })
-                        .style("fill", function(p) {
+                        .style("fill", function (p) {
                             return colorPalette[p["referenced-n-times-local"]];
                         });
 
