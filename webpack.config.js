@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
 
 // Is the current build a development build
 const IS_DEV = (process.env.NODE_ENV === 'dev');
@@ -26,7 +28,10 @@ module.exports = {
             dirNode,
             dirApp,
             dirAssets
-        ]
+        ],
+        alias: {
+            'vue$': 'vue/dist/vue.esm.js'
+        }
     },
     plugins: [
         new webpack.DefinePlugin({
@@ -36,7 +41,9 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: path.join(__dirname, 'index.ejs'),
             title: appHtmlTitle
-        })
+        }),
+
+        new VueLoaderPlugin()
     ],
     module: {
         rules: [
@@ -92,6 +99,12 @@ module.exports = {
                 options: {
                     name: '[path][name].[ext]'
                 }
+            },
+
+            // VUE
+            {
+                test: /\.vue$/,
+                loader: 'vue-loader'
             }
         ]
     }

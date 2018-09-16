@@ -6,7 +6,7 @@
   "license": "GPL-3.0",
   "homepage": "https://www.github.com:OndragKlaus/paper-references-explorer",
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev webpack-dev-server --progress --mode development --config webpack.config.dev.js",
+    "dev": "cross-env NODE_ENV=dev webpack-dev-server --progress --mode development --config webpack.config.dev.js --hot",
     "build": "webpack -p --progress --mode production --config webpack.config.build.js"
   },
   "repository": {
@@ -16,7 +16,8 @@
   "dependencies": {
     "d3": "^5.7.0",
     "google-palette": "^1.1.0",
-    "lodash": "4.17.10"
+    "lodash": "4.17.10",
+    "vue": "^2.5.17"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
@@ -32,6 +33,8 @@
     "sass-loader": "7.1.0",
     "style-loader": "0.23.0",
     "url-loader": "1.1.1",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.17",
     "webpack": "4.17.2",
     "webpack-cli": "3.1.0",
     "webpack-dev-server": "3.1.8",
