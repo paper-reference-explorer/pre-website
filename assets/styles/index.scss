@@ -1,54 +1,36 @@
 $background-color: #00000010;
-$margin: 5px;
+$margin: 0px;
 $grid-gap: 10px;
 
-html {
-    box-sizing: border-box;
-}
-
 *, *:before, *:after {
-    box-sizing: inherit;
-    margin: $margin;
     font-family: Roboto, sans-serif;
 }
 
 body {
     max-width: 1500px;
-    margin-left: auto;
-    margin-right: auto;
+    margin-left: auto !important;
+    margin-right: auto !important;
 }
 
 .grid-container {
     display: grid;
-    grid-template-columns: 1fr 300px;
-    grid-template-rows: 100px 200px max-content;
-    grid-gap: $grid-gap;
-    grid-template-areas: "header header" "visualization information" "visualization user-papers";
-    height: calc(100vh - 2 * #{$margin} - #{$grid-gap});
+    height: 100%;
+    grid-template-columns: auto 250px;
+    grid-template-rows: auto auto;
+    grid-gap: 1px;
+    grid-template-areas: "graph info" "graph user";
 }
 
-.header {
-    grid-area: header;
-    background-color: $background-color;
+.graph {
+    grid-area: graph;
 }
 
-.information {
-    grid-area: information;
-    background-color: $background-color;
+.info {
+    grid-area: info;
 }
 
-.user-papers {
-    grid-area: user-papers;
-    background-color: $background-color;
-}
-
-.visualization {
-    grid-area: visualization;
-    background-color: $background-color;
-}
-
-svg {
-    margin: 0;
+.user {
+    grid-area: user;
 }
 
 line {
