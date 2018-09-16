@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "d3": "^5.7.0",
+    "d3-force": "^1.1.2",
     "google-palette": "^1.1.0",
     "lodash": "4.17.10",
     "vue": "^2.5.17",

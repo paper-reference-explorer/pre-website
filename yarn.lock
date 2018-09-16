@@ -1584,7 +1584,7 @@ d3-fetch@1:
   dependencies:
     d3-dsv "1"
 
-d3-force@1:
+d3-force@1, d3-force@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/d3-force/-/d3-force-1.1.2.tgz#16664d0ac71d8727ef5effe0b374feac8050d6cd"
   dependencies:
