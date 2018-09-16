@@ -5,7 +5,8 @@
 </template>
 
 <script>
-    import {data, constants} from './data.js';
+    import {data, constants} from "./data.js";
+    import * as D3ForceBoilerplate from "./d3ForceBoilerplate.js";
     import * as d3 from "d3";
     import palette from "google-palette";
 
