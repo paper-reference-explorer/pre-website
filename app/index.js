@@ -113,6 +113,9 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                                 .style("opacity", .9);
                             div.html(
                                 p["authors"] + " \"" + p["title"] + "\""
+                                + "<br />Submitted to arxiv on " + p["date-created"] + "."
+                                + "<br />Referenced " + p["referenced-n-times-global"].toString() + " times on arxiv."
+                                + "<br />Referenced by " + p["referenced-n-times-local"].toString() + " of your papers."
                             )
                                 .style("left", (d3.event.pageX) + "px")
                                 .style("top", (d3.event.pageY - 28) + "px");
