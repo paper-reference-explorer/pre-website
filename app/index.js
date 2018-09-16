@@ -1,6 +1,7 @@
 import 'styles/index.scss';
 import {data, constants} from './data.js';
 import * as d3 from "d3";
+import palette from "google-palette";
 
 console.log(data);
 
@@ -60,7 +61,7 @@ function logslider(position, nElements) {
 }
 
 var meta = getMeta();
-console.log(meta);
+var colorPalette = palette('tol-sq', meta["maximumReferencedLocal"] + 1);
 
 for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
     var sectionWrapper = data[sectionIndex];
@@ -90,16 +91,20 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
 
                     var g = svgSelection.append("g");
                     var x = ((paperIndex + 1) / (nPapersInSection + 1) * 100).toString() + "%";
+                    var y = offset + sectionHeight / 2;
+                    var radius = logslider(paper["referenced-n-times-global"], meta["maximumReferencedGlobal"]);
+                    var backgroundColor = colorPalette[paper["referenced-n-times-local"]];
+
                     g.append("circle")
                         .attr("cx", x)
-                        .attr("cy", offset + sectionHeight / 2)
-                        .attr("r", logslider(paper["referenced-n-times-global"], meta["maximumReferencedGlobal"]))
-                        .style("fill", "purple");
+                        .attr("cy", y)
+                        .attr("r", radius)
+                        .style("fill", backgroundColor);
 
                     g.append("text")
                         .attr("class", "paper-label")
                         .attr("x", x)
-                        .attr("y", offset + sectionHeight / 2)
+                        .attr("y", y)
                         .attr("text-anchor", "middle")
                         .attr("dominant-baseline", "middle")
                         .text(paperKey);
