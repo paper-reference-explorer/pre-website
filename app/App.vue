@@ -10,11 +10,9 @@
             <div class="info">
                 <md-card>
                     <md-card-expand>
-                        <md-card-actions>
+                        <md-card-actions md-alignment="left">
                             <md-card-expand-trigger>
-                                <md-button class="md-icon-button">
-                                    <md-icon>keyboard_arrow_down</md-icon>
-                                </md-button>
+                                <md-button style="width: 100%;">Information</md-button>
                             </md-card-expand-trigger>
                         </md-card-actions>
 
@@ -28,7 +26,7 @@
                     </md-card-expand>
                 </md-card>
             </div>
-            <div class="user">
+            <div class="user"> 
             </div>
         </div>
     </div>
