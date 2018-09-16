@@ -67,8 +67,10 @@ for (var colorIndex = 0; colorIndex < colorPalette.length; colorIndex++) {
     colorPalette[colorIndex] = "#" + colorPalette[colorIndex];
 }
 
-var defaultSize = 1;
-var defaultColor = colorPalette[0];
+var transitionTime = 1000;
+var startRadius = 0;
+var startFontSize = 0;
+var startColor = colorPalette[0];
 console.log(colorPalette);
 
 for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
@@ -106,10 +108,10 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                     g.append("circle")
                         .attr("cx", x)
                         .attr("cy", y)
-                        .attr("r", defaultSize)
-                        .style("fill", defaultColor)
+                        .attr("r", startRadius)
+                        .style("fill", startColor)
                         .transition()
-                        .duration(1000)
+                        .duration(transitionTime)
                         .attr("r", radius)
                         .style("fill", backgroundColor);
 
@@ -119,7 +121,11 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                         .attr("y", y)
                         .attr("text-anchor", "middle")
                         .attr("dominant-baseline", "middle")
-                        .text(paperKey);
+                        .text(paperKey)
+                        .style("font-size", startFontSize)
+                        .transition()
+                        .duration(transitionTime)
+                        .style("font-size", "1.5px");
 
                     paperIndex++;
                 }
