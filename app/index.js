@@ -1,8 +1,38 @@
 import 'styles/index.scss';
-import {data} from './data.js';
+import {data, constants} from './data.js';
 import * as d3 from "d3";
 
 console.log(data);
+
+var nSections = data.length;
+var svgSelection = d3.select("#visualization");
+
+function getMeta() {
+    var meta = {
+        "maximumReferencedGlobal": 0,
+        "maximumReferencedLocal": 0
+    };
+    for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
+        var sectionWrapper = data[sectionIndex];
+        for (var sectionKey in sectionWrapper) {
+            if (sectionWrapper.hasOwnProperty(sectionKey)) {
+                var section = sectionWrapper[sectionKey];
+                for (var paperKey in section) {
+                    if (section.hasOwnProperty(paperKey)) {
+                        var paper = section[paperKey];
+                        if (paper["referenced-n-times-global"] > meta['maximumReferencedGlobal']) {
+                            meta['maximumReferencedGlobal'] = paper["referenced-n-times-global"];
+                        }
+                        if (paper["referenced-n-times-local"] > meta['maximumReferencedLocal']) {
+                            meta['maximumReferencedLocal'] = paper["referenced-n-times-local"];
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return meta;
+}
 
 function len(o) {
     var count = 0;
@@ -14,8 +44,23 @@ function len(o) {
     return count
 }
 
-var nSections = data.length;
-var svgSelection = d3.select("#visualization");
+// https://stackoverflow.com/questions/846221/logarithmic-slider
+function logslider(position, nElements) {
+    // position will be between 0 and 100
+    var minp = 0;
+    var maxp = nElements;
+
+    var minv = Math.log(constants.minimumSize);
+    var maxv = Math.log(constants.maximumSize);
+
+    // calculate adjustment factor
+    var scale = (maxv - minv) / (maxp - minp);
+
+    return Math.exp(minv + scale * (position - minp));
+}
+
+var meta = getMeta();
+console.log(meta);
 
 for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
     var sectionWrapper = data[sectionIndex];
@@ -48,7 +93,7 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                     g.append("circle")
                         .attr("cx", x)
                         .attr("cy", offset + sectionHeight / 2)
-                        .attr("r", 5)
+                        .attr("r", logslider(paper["referenced-n-times-global"], meta["maximumReferencedGlobal"]))
                         .style("fill", "purple");
 
                     g.append("text")
