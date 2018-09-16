@@ -10,9 +10,13 @@
             <div class="info">
                 <md-card>
                     <md-card-expand>
-                        <md-card-actions md-alignment="left">
+                        <md-card-actions md-alignment="space-between">
+                            <span class="md-title">Information</span>
+
                             <md-card-expand-trigger>
-                                <md-button style="width: 100%;">Information</md-button>
+                                <md-button class="md-icon-button">
+                                    <md-icon>keyboard_arrow_down</md-icon>
+                                </md-button>
                             </md-card-expand-trigger>
                         </md-card-actions>
 
