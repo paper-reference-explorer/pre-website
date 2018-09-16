@@ -80,7 +80,44 @@
     export default {
         name: 'non-vue-line-chart',
         mounted() {
-            var svgSelection = d3.select("#visualization");
+            // TODO TEMP
+            var container = d3.select("#visualization");
+            var width = container.width,
+                height = container.height;
+            d3.json("test.json", function (error, graph) {
+                if (error) throw error;
+
+                var link = container.append("graph")
+                    .attr("class", "links")
+                    .selectAll("line")
+                    .data(graph.links)
+                    .enter().append("line")
+                    .attr("stroke-width", function (d) {
+                        return Math.sqrt(d.value);
+                    });
+
+                var node = container.append("graph")
+                    .attr("class", "nodes")
+                    .selectAll("circle")
+                    .data(graph.nodes)
+                    .enter().append("circle")
+                    .attr("r", 5)
+                    .attr("fill", function (d) {
+                        return color(d.group);
+                    })
+                    .call(d3.drag()
+                        .on("start", D3ForceBoilerplate.dragstarted)
+                        .on("drag", D3ForceBoilerplate.dragged)
+                        .on("end", D3ForceBoilerplate.dragended));
+            });
+
+            var nodes = [{index: 0, x: width / 2, y: 50}];
+            var simulation = d3.forceSimulation(nodes);
+            container.append(simulation);
+            console.log("" + width + " " + height + " >" + nodes);
+            // TODO END TODO
+
+            /*var svgSelection = d3.select("#visualization");
             var div = d3.select("body").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
@@ -167,7 +204,7 @@
                         }
                     }
                 }
-            }
+            }*/
         }
     }
 </script>
