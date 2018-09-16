@@ -23,7 +23,7 @@ body {
     grid-template-columns: 1fr 300px;
     grid-template-rows: 100px 200px max-content;
     grid-gap: $grid-gap;
-    grid-template-areas: "header header" "visualization selection-info" "visualization user-papers";
+    grid-template-areas: "header header" "visualization information" "visualization user-papers";
     height: calc(100vh - 2 * #{$margin} - #{$grid-gap});
 }
 
@@ -32,8 +32,8 @@ body {
     background-color: $background-color;
 }
 
-.selection-info {
-    grid-area: selection-info;
+.information {
+    grid-area: information;
     background-color: $background-color;
 }
 
