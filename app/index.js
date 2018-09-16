@@ -63,6 +63,14 @@ function logslider(position, nElements) {
 var meta = getMeta();
 var colorPalette = palette('tol-sq', meta["maximumReferencedLocal"] + 1);
 
+for (var colorIndex = 0; colorIndex < colorPalette.length; colorIndex++) {
+    colorPalette[colorIndex] = "#" + colorPalette[colorIndex];
+}
+
+var defaultSize = 1;
+var defaultColor = colorPalette[0];
+console.log(colorPalette);
+
 for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
     var sectionWrapper = data[sectionIndex];
     for (var sectionKey in sectionWrapper) {
@@ -98,6 +106,10 @@ for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                     g.append("circle")
                         .attr("cx", x)
                         .attr("cy", y)
+                        .attr("r", defaultSize)
+                        .style("fill", defaultColor)
+                        .transition()
+                        .duration(1000)
                         .attr("r", radius)
                         .style("fill", backgroundColor);
 
