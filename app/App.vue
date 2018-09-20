@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-toolbar>
+        <md-toolbar class="md-primary">
             <span class="md-title">Paper references explorer</span>
         </md-toolbar>
         <div class="grid-container">
@@ -8,43 +8,10 @@
                 <Visualization></Visualization>
             </div>
             <div class="info">
-                <md-card>
-                    <md-card-expand>
-                        <md-card-actions md-alignment="left">
-                            <md-card-expand-trigger>
-                                <md-button style="width: 100%;">Information</md-button>
-                            </md-card-expand-trigger>
-                        </md-card-actions>
-
-                        <md-card-expand-content>
-                            <md-card-content>
-                                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea,
-                                nostrum odio. Dolores, sed accusantium quasi non, voluptas eius illo quas,
-                                saepe voluptate pariatur in deleniti minus sint. Excepturi.
-                            </md-card-content>
-                        </md-card-expand-content>
-                    </md-card-expand>
-                </md-card>
+                <Info></Info>
             </div>
             <div class="user">
-                <md-card>
-                    <md-card-header>
-                        <div class="md-title">Added papers</div>
-                    </md-card-header>
-                    <md-card-content>
-                        <md-list class="md-double-line">
-                            <md-list-item>
-                                <div class="md-list-item-text">
-                                    <span>My paper</span>
-                                    <span>A et. al.</span>
-                                </div>
-                                <md-button class="md-icon-button md-list-action">
-                                    <md-icon>delete</md-icon>
-                                </md-button>
-                            </md-list-item>
-                        </md-list>
-                    </md-card-content>
-                </md-card>
+                <User></User>
             </div>
         </div>
     </div>
@@ -52,11 +19,15 @@
 
 <script>
     import Visualization from './components/Visualization.vue';
+    import Info from './components/Info.vue';
+    import User from './components/User.vue';
 
     export default {
         name: 'app',
         components: {
-            Visualization
+            Visualization,
+            Info,
+            User
         },
         data() {
             return {

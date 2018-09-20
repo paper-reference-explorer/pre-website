@@ -6,9 +6,6 @@ $grid-gap: 10px;
     font-family: Roboto, sans-serif;
 }
 
-body {
-}
-
 .grid-container {
     max-width: 1200px;
     margin-left: auto !important;
@@ -18,8 +15,8 @@ body {
     display: grid;
     height: 100vh;
     grid-template-columns: auto 250px;
-    grid-template-rows: min-content max-content;
-    grid-gap: 0;
+    grid-template-rows: max-content auto;
+    grid-gap: 10px;
     grid-template-areas: "graph info" "graph user";
 }
 
@@ -29,7 +26,6 @@ body {
 
 .info {
     grid-area: info;
-    height: 100%;
 }
 
 .user {
@@ -56,4 +52,12 @@ div.tooltip {
     border: 0;
     border-radius: 8px;
     pointer-events: none;
+}
+
+.fake-card-title-wrapper {
+    padding: 16px !important;
+}
+
+.fake-card-title-header {
+    padding: 0 !important;
 }
