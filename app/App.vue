@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-toolbar>
+        <md-toolbar class="md-primary">
             <span class="md-title">Paper references explorer</span>
         </md-toolbar>
         <div class="grid-container">
