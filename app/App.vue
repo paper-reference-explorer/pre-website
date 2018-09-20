@@ -2,6 +2,7 @@
     <div>
         <md-toolbar class="md-primary">
             <span class="md-title">Paper references explorer</span>
+            <Search></Search>
         </md-toolbar>
         <div class="grid-container">
             <div class="graph">
@@ -21,13 +22,15 @@
     import Visualization from './components/Visualization.vue';
     import Info from './components/Info.vue';
     import User from './components/User.vue';
+    import Search from './components/Search.vue';
 
     export default {
         name: 'app',
         components: {
             Visualization,
             Info,
-            User
+            User,
+            Search
         },
         data() {
             return {
