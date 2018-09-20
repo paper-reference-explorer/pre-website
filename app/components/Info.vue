@@ -1,5 +1,5 @@
 <template>
-    <md-card>
+    <md-card ref="card">
         <md-card-expand>
             <md-card-actions md-alignment="space-between" class="fake-card-title-wrapper">
                 <md-card-header class="fake-card-title-header">
@@ -26,6 +26,9 @@
 
 <script>
     export default {
-        name: 'Info'
+        name: "Info",
+        mounted() {
+            this.$refs.card.MdCard.expand = true;
+        }
     };
 </script>
