@@ -8,7 +8,7 @@
                 <md-list-item>
                     <div class="md-list-item-text">
                         <span>My paper</span>
-                        <span>A et. al.</span>
+                        <p>A et. al.</p>
                     </div>
                     <md-button class="md-icon-button md-list-action">
                         <md-icon>delete</md-icon>
