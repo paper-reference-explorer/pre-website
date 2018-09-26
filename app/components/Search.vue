@@ -19,8 +19,20 @@
     };
 </script>
 
-<style>
-    .search-button {
+<style type="scss">
+    .container {
+        display: flex;
+    }
+
+    #search-button {
         min-width: 24px !important;
+        margin-top: 6px !important;
+        margin-bottom: 6px !important;
+    }
+
+    #search-box {
+        margin-top: 6px !important;
+        margin-bottom: 6px !important;
+        height: 40px !important;
     }
 </style>
