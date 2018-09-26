@@ -1,8 +1,15 @@
 <template>
     <div>
-        <md-button class="search-button">
-            <md-icon>search</md-icon>
-        </md-button>
+        <div class="container">
+            <md-field class="">
+                <md-button id="search-button" class="md-icon-button">
+                    <md-icon>search</md-icon>
+                </md-button>
+                <md-input id="search-box" class="md-accent">
+                </md-input>
+            </md-field>
+        </div>
+        <br/>
     </div>
 </template>
 
