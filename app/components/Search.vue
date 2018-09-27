@@ -1,15 +1,12 @@
 <template>
-    <div>
-        <div class="container">
-            <md-field class="">
-                <md-button id="search-button" class="md-icon-button">
-                    <md-icon>search</md-icon>
-                </md-button>
-                <md-input id="search-box" class="md-accent">
-                </md-input>
-            </md-field>
-        </div>
-        <br/>
+    <div class="search-wrapper">
+        <md-field class="wrapper">
+            <md-button id="search-button" class="md-icon-button">
+                <md-icon>search</md-icon>
+            </md-button>
+            <md-input>
+            </md-input>
+        </md-field>
     </div>
 </template>
 
@@ -20,19 +17,19 @@
 </script>
 
 <style type="scss">
-    .container {
+    .search-wrapper {
         display: flex;
+        height: 64px;
+    }
+
+    .wrapper {
+        margin: 16px 0 !important;
+        padding: 0 !important;
+        height: 32px !important;
+        min-height: 32px !important;
     }
 
     #search-button {
-        min-width: 24px !important;
-        margin-top: 6px !important;
-        margin-bottom: 6px !important;
-    }
-
-    #search-box {
-        margin-top: 6px !important;
-        margin-bottom: 6px !important;
-        height: 40px !important;
+        margin-top: -5px !important;
     }
 </style>
