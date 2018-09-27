@@ -1,6 +1,6 @@
 <template>
     <div>
-        <md-toolbar class="md-primary">
+        <md-toolbar class="md-accent">
             <span class="md-title">Paper references explorer</span>
             <Search></Search>
         </md-toolbar>
