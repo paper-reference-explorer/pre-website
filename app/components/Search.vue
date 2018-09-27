@@ -4,7 +4,7 @@
             <md-button id="search-button" class="md-icon-button">
                 <md-icon>search</md-icon>
             </md-button>
-            <md-input>
+            <md-input placeholder="Search for an arXiv paper">
             </md-input>
         </md-field>
     </div>
