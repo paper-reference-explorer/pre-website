@@ -87,7 +87,7 @@
                 class="hidden-sm-and-down"
             ></v-text-field>
             <v-spacer></v-spacer>
-            <v-btn icon>
+            <v-btn icon @click="dialog = !dialog">
                 <v-icon>help</v-icon>
             </v-btn>
         </v-toolbar>
