@@ -1,7 +1,5 @@
 <template>
-    <div id="wrapper">
-        <svg id="visualization" viewBox="0 0 100 100"></svg>
-    </div>
+    <svg id="visualization" viewBox="0 0 100 100"></svg>
 </template>
 
 <script>
@@ -83,8 +81,6 @@
             var div = d3.select("body").append("div")
                 .attr("class", "tooltip")
                 .style("opacity", 0);
-            var wrapperSelection = d3.select("#wrapper");
-            wrapperSelection.attr("height", "1001px");
 
             for (var sectionIndex = 0; sectionIndex < nSections; sectionIndex++) {
                 var sectionWrapper = data[sectionIndex];
@@ -170,3 +166,10 @@
         }
     }
 </script>
+
+<style>
+    #visualization {
+        height: 100%;
+        width: 100%;
+    }
+</style>
