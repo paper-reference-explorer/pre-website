@@ -7,61 +7,24 @@
             app
             width="326"
         > <!-- 320 (title width) + 6 (toolbar padding) = 326 -->
-            <v-list dense>
-                <template v-for="item in items">
-                    <v-layout
-                        v-if="item.heading"
-                        :key="item.heading"
-                        row
-                        align-center
-                    >
-                        <v-flex xs6>
-                            <v-subheader v-if="item.heading">
-                                {{ item.heading }}
-                            </v-subheader>
-                        </v-flex>
-                        <v-flex xs6 class="text-xs-center">
-                            <a href="#!" class="body-2 black--text">EDIT</a>
-                        </v-flex>
-                    </v-layout>
-                    <v-list-group
-                        v-else-if="item.children"
-                        v-model="item.model"
-                        :key="item.text"
-                        :prepend-icon="item.model ? item.icon : item['icon-alt']"
-                        append-icon=""
-                    >
-                        <v-list-tile slot="activator">
-                            <v-list-tile-content>
-                                <v-list-tile-title>
-                                    {{ item.text }}
-                                </v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                        <v-list-tile
-                            v-for="(child, i) in item.children"
-                            :key="i"
-                            @click=""
-                        >
-                            <v-list-tile-action v-if="child.icon">
-                                <v-icon>{{ child.icon }}</v-icon>
-                            </v-list-tile-action>
-                            <v-list-tile-content>
-                                <v-list-tile-title>
-                                    {{ child.text }}
-                                </v-list-tile-title>
-                            </v-list-tile-content>
-                        </v-list-tile>
-                    </v-list-group>
-                    <v-list-tile v-else :key="item.text" @click="">
-                        <v-list-tile-action>
-                            <v-icon>{{ item.icon }}</v-icon>
-                        </v-list-tile-action>
+            <v-subheader>Information</v-subheader>
+            <v-divider></v-divider>
+            <v-list subheader two-line>
+                <v-subheader>Added papers</v-subheader>
+                <template v-for="item in addedPapers">
+                    <v-list-tile :key="item.title" @click="">
                         <v-list-tile-content>
-                            <v-list-tile-title>
-                                {{ item.text }}
-                            </v-list-tile-title>
+                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                            <v-list-tile-sub-title>
+                                {{ item["date-created"].substring(0, 4) }} - {{ item.authors }}
+                            </v-list-tile-sub-title>
                         </v-list-tile-content>
+
+                        <v-list-tile-action>
+                            <v-btn icon>
+                                <v-icon>delete</v-icon>
+                            </v-btn>
+                        </v-list-tile-action>
                     </v-list-tile>
                 </template>
             </v-list>
@@ -166,6 +129,7 @@
 
 <script>
     import Visualization from './components/Visualization.vue';
+
     export default {
         components: {
             Visualization
@@ -173,37 +137,10 @@
         data: () => ({
             dialog: false,
             drawer: null,
-            items: [
-                {icon: 'contacts', text: 'Contacts'},
-                {icon: 'history', text: 'Frequently contacted'},
-                {icon: 'content_copy', text: 'Duplicates'},
-                {
-                    icon: 'keyboard_arrow_up',
-                    'icon-alt': 'keyboard_arrow_down',
-                    text: 'Labels',
-                    model: true,
-                    children: [
-                        {icon: 'add', text: 'Create label'}
-                    ]
-                },
-                {
-                    icon: 'keyboard_arrow_up',
-                    'icon-alt': 'keyboard_arrow_down',
-                    text: 'More',
-                    model: false,
-                    children: [
-                        {text: 'Import'},
-                        {text: 'Export'},
-                        {text: 'Print'},
-                        {text: 'Undo changes'},
-                        {text: 'Other contacts'}
-                    ]
-                },
-                {icon: 'settings', text: 'Settings'},
-                {icon: 'chat_bubble', text: 'Send feedback'},
-                {icon: 'help', text: 'Help'},
-                {icon: 'phonelink', text: 'App downloads'},
-                {icon: 'keyboard', text: 'Go to the old version'}
+            addedPapers: [
+                {"authors": "A et al.", "title": "My first paper", "date-created": "2018-09-01"},
+                {"authors": "B et al.", "title": "Friendly paper", "date-created": "2018-04-23"},
+                {"authors": "C et al.", "title": "Another friendly paper", "date-created": "2016-12-05"}
             ]
         }),
         props: {
