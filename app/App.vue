@@ -86,20 +86,10 @@
             ></v-text-field>
             <v-spacer></v-spacer>
             <v-btn icon>
-                <v-icon>apps</v-icon>
-            </v-btn>
-            <v-btn icon>
-                <v-icon>notifications</v-icon>
-            </v-btn>
-            <v-btn icon large>
-                <v-avatar size="32px" tile>
-                    <img
-                        src="https://cdn.vuetifyjs.com/images/logos/logo.svg"
-                        alt="Vuetify"
-                    >
-                </v-avatar>
+                <v-icon>help</v-icon>
             </v-btn>
         </v-toolbar>
+
         <v-content>
             <v-container fluid fill-height>
                 <v-layout justify-center align-center>
