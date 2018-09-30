@@ -2,22 +2,26 @@ $background-color: #00000010;
 $margin: 0px;
 $grid-gap: 10px;
 
+@import "~vue-material/dist/theme/engine"; // Import the theme engine
+
+@include md-register-theme("default", (
+    primary: md-get-palette-color(pink, A200), // The primary color of your application
+    accent: md-get-palette-color(green, A200) // The accent or secondary color
+));
+
+@import "~vue-material/dist/theme/all"; // Apply the theme
+
 *, *:before, *:after {
     font-family: Roboto, sans-serif;
 }
 
 .grid-container {
-    max-width: 1200px;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-top: 20px;
 
     display: grid;
     height: 100vh;
-    grid-template-columns: auto 250px;
+    grid-template-columns: 320px auto;
     grid-template-rows: max-content auto;
-    grid-gap: 10px;
-    grid-template-areas: "graph info" "graph user";
+    grid-template-areas: "info graph" "user graph";
 }
 
 .graph {
