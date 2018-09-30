@@ -5,7 +5,8 @@
             v-model="drawer"
             fixed
             app
-        >
+            width="326"
+        > <!-- 320 (title width) + 6 (toolbar padding) = 326 -->
             <v-list dense>
                 <template v-for="item in items">
                     <v-layout
@@ -239,9 +240,5 @@
 
     .v-list__tile {
         padding: 0 20px !important; /* icons should start at 20 */
-    }
-
-    .v-navigation-drawer {
-        width: 326px !important;  /* 320 (title width) + 6 (toolbar padding) = 326 */
     }
 </style>
