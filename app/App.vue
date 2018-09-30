@@ -65,6 +65,7 @@
                 </template>
             </v-list>
         </v-navigation-drawer>
+
         <v-toolbar
             :clipped-left="$vuetify.breakpoint.lgAndUp"
             color="blue darken-3"
@@ -115,6 +116,7 @@
                 </v-layout>
             </v-container>
         </v-content>
+
         <v-btn
             fab
             bottom
@@ -126,6 +128,7 @@
         >
             <v-icon>add</v-icon>
         </v-btn>
+        
         <v-dialog v-model="dialog" width="800px">
             <v-card>
                 <v-card-title
