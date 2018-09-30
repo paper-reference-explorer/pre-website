@@ -2,10 +2,10 @@ import 'styles/index.scss';
 
 import Vue from 'vue';
 import App from './App.vue';
-import VueMaterial from 'vue-material';
-import 'vue-material/dist/vue-material.min.css';
+import Vuetify from 'vuetify';
+import 'vuetify/dist/vuetify.min.css';
 
-Vue.use(VueMaterial);
+Vue.use(Vuetify);
 
 /* eslint-disable no-new */
 new Vue({
