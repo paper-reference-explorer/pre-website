@@ -73,7 +73,7 @@
             app
             fixed
         >
-            <v-toolbar-title style="width: 300px" class="ml-0 pl-3">
+            <v-toolbar-title>
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                 <span class="hidden-sm-and-down">Paper references explorer</span>
             </v-toolbar-title>
@@ -238,3 +238,22 @@
         }
     }
 </script>
+
+<style>
+    .v-toolbar__content {
+        /* (6 + 12) (button margin) + 8 (icon specific margin) - 20 (icons should start at) = 6 */
+        padding: 0 20px 0 6px !important;
+    }
+
+    .v-toolbar__title {
+        width: 320px !important;
+    }
+
+    .v-list__tile {
+        padding: 0 20px !important; /* icons should start at 20 */
+    }
+
+    .v-navigation-drawer {
+        width: 326px !important;  /* 320 (title width) + 6 (toolbar padding) = 326 */
+    }
+</style>
