@@ -12,20 +12,23 @@
             <v-list subheader two-line>
                 <v-subheader>Added papers</v-subheader>
                 <template v-for="item in addedPapers">
-                    <v-list-tile :key="item.title" @click="">
-                        <v-list-tile-content>
-                            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-                            <v-list-tile-sub-title>
-                                {{ item["date-created"].substring(0, 4) }} - {{ item.authors }}
-                            </v-list-tile-sub-title>
-                        </v-list-tile-content>
+                    <v-hover close-delay="0">
+                        <v-list-tile :key="item.title" @click="" slot-scope="{ hover }">
+                            <v-list-tile-content>
+                                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                <v-list-tile-sub-title>
+                                    {{ item["date-created"].substring(0, 4) }} - {{ item.authors }}
+                                </v-list-tile-sub-title>
+                            </v-list-tile-content>
 
-                        <v-list-tile-action>
-                            <v-btn icon>
-                                <v-icon>delete</v-icon>
-                            </v-btn>
-                        </v-list-tile-action>
-                    </v-list-tile>
+                            <v-list-tile-action>
+
+                                <v-btn icon v-if="hover">
+                                    <v-icon>delete</v-icon>
+                                </v-btn>
+                            </v-list-tile-action>
+                        </v-list-tile>
+                    </v-hover>
                 </template>
             </v-list>
         </v-navigation-drawer>
