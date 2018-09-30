@@ -1,9 +1,16 @@
 <template>
     <div>
         <md-toolbar class="md-accent">
-            <span class="md-title">Paper references explorer</span>
-            <Search></Search>
+            <div class="md-toolbar-section-start md-title title-wrapper">
+                <span>Paper references explorer</span>
+            </div>
+            <div>
+                <Search></Search>
+            </div>
+            <div class="md-toolbar-section-end">
+            </div>
         </md-toolbar>
+
         <div class="grid-container">
             <div class="graph">
                 <Visualization></Visualization>
@@ -40,3 +47,12 @@
         methods: {}
     };
 </script>
+
+<style type="scss">
+    .title-wrapper {
+        min-width: calc(320px - 16px) !important;
+        max-width: calc(320px - 16px) !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+</style>

@@ -16,17 +16,12 @@ $grid-gap: 10px;
 }
 
 .grid-container {
-    max-width: 1200px;
-    margin-left: auto !important;
-    margin-right: auto !important;
-    margin-top: 20px;
 
     display: grid;
     height: 100vh;
-    grid-template-columns: auto 250px;
+    grid-template-columns: 320px auto;
     grid-template-rows: max-content auto;
-    grid-gap: 10px;
-    grid-template-areas: "graph info" "graph user";
+    grid-template-areas: "info graph" "user graph";
 }
 
 .graph {
