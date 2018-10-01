@@ -24,11 +24,22 @@ var store = new Vuex.Store({
     mutations: {
         REMOVE_PAPER(state, index) {
             state.addedPapers.splice(index, 1);
+        },
+        SET_DRAWER_STATUS(state, value) {
+            state.isDrawerOpen = value;
         }
     },
     actions: {
         removePaper({commit}, index) {
             commit("REMOVE_PAPER", index);
+        },
+        setDrawerStatus({commit}, value) {
+            commit("SET_DRAWER_STATUS", value);
+        },
+        toggleDrawerStatus({commit, state}) {
+            let oldValue = state.isDrawerOpen;
+            let newValue = !oldValue;
+            commit("SET_DRAWER_STATUS", newValue);
         }
     }
 });

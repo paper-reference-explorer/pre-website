@@ -1,9 +1,6 @@
 <template>
     <v-app id="inspire">
-        <Drawer
-            ref="drawer"
-        >
-        </Drawer>
+        <Drawer></Drawer>
 
         <v-toolbar
             :clipped-left="$vuetify.breakpoint.lgAndUp"
@@ -13,7 +10,7 @@
             fixed
         >
             <v-toolbar-title>
-                <v-toolbar-side-icon @click.stop="$refs.drawer.toggleOpened()"></v-toolbar-side-icon>
+                <v-toolbar-side-icon @click.stop="$store.dispatch('toggleDrawerStatus')"></v-toolbar-side-icon>
                 <span class="hidden-sm-and-down">Paper references explorer</span>
             </v-toolbar-title>
 

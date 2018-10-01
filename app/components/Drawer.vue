@@ -29,7 +29,7 @@
 
                         <v-list-tile-action>
 
-                            <v-btn icon v-if="hover" @click="deletePaper(index)">
+                            <v-btn icon v-if="hover" @click="$store.dispatch('removePaper', index)">
                                 <v-icon>delete</v-icon>
                             </v-btn>
                         </v-list-tile-action>
@@ -44,19 +44,16 @@
     export default {
         name: "Drawer",
         computed: {
-            addedPapers() {
-                return this.$store.state.addedPapers
-            }
-        },
-        data: () => ({
-            isOpen: true
-        }),
-        methods: {
-            deletePaper: function (index) {
-                this.$store.dispatch("removePaper", index);
+            isOpen: {
+                get: function () {
+                    return this.$store.state.isDrawerOpen;
+                },
+                set: function (newValue) {
+                    this.$store.dispatch("setDrawerStatus", newValue);
+                }
             },
-            toggleOpened: function () {
-                this.isOpen = !this.isOpen;
+            addedPapers() {
+                return this.$store.state.addedPapers;
             }
         }
     }
