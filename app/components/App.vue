@@ -48,9 +48,9 @@
 </template>
 
 <script>
-    import Visualization from './components/Visualization.vue';
-    import Drawer from "./components/Drawer.vue";
-    import About from "./components/About.vue";
+    import Visualization from './Visualization.vue';
+    import Drawer from "./Drawer.vue";
+    import About from "./About.vue";
 
     export default {
         components: {
