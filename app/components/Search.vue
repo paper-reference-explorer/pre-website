@@ -9,8 +9,12 @@
         class="hidden-sm-and-down"
         :loading="loading"
         :items="items"
+        item-text="description"
+        item-value="paper"
         :search-input.sync="search"
         v-model="select"
+        no-filter
+        no-data-text=""
     ></v-autocomplete>
 </template>
 
@@ -23,11 +27,20 @@
             loading: false,
             items: [],
             search: null,
-            select: null,
+            select: null
         }),
         watch: {
             search(val) {
-                val && val !== this.select && this.querySelections(val);
+                if (val && val !== this.select) {
+                    this.querySelections(val);
+                }
+            },
+            select(val) {
+                if (val) {
+                    console.log(val);
+                    this.select = undefined;
+                    this.items = undefined;
+                }
             }
         },
         methods: {
@@ -36,9 +49,11 @@
                 axios.get('/search', {params: {keyword: query}})
                     .then((response) => {
                         this.items = response.data.papers
-                            .map(p => p.year + " - " + p.authors + " " + p.title)
-                            .filter(e => {
-                                return (e || '').toLowerCase().indexOf((query || '').toLowerCase()) > -1
+                            .map(function (p) {
+                                return {
+                                    "paper": p,
+                                    "description": p.year + " - " + p.authors + " " + p.title
+                                }
                             });
                     })
                     .catch((error) => {
