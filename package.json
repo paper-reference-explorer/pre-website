@@ -16,10 +16,12 @@
   "dependencies": {
     "d3": "^5.7.0",
     "d3-force": "^1.1.2",
+    "es6-promise": "^4.2.5",
     "google-palette": "^1.1.0",
     "lodash": "4.17.10",
     "vue": "^2.5.17",
-    "vuetify": "^1.2.5"
+    "vuetify": "^1.2.5",
+    "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@babel/core": "7.0.0",

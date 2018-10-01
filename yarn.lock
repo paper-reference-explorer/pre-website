@@ -2334,6 +2334,11 @@ es-to-primitive@^1.1.1:
     is-date-object "^1.0.1"
     is-symbol "^1.0.1"
 
+es6-promise@^4.2.5:
+  version "4.2.5"
+  resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.5.tgz#da6d0d5692efb461e082c14817fe2427d8f5d054"
+  integrity sha512-n6wvpdE43VFtJq+lUDYDBFUwV8TZbuGXLV4D6wKafg13ldznKsyEvatubnmUe31zcvelSzOHF+XbaT+Bl9ObDg==
+
 escape-html@~1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/escape-html/-/escape-html-1.0.3.tgz#0258eae4d3d0c0974de1c169188ef0051d1d1988"
@@ -6081,6 +6086,11 @@ vuetify@^1.2.5:
   version "1.2.5"
   resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-1.2.5.tgz#91578367709b20e406f2cdc7a164dfd70df954d9"
   integrity sha512-K/Fkh+nPoa6EcW/KgdVVyZDpe2zsjANHNZ2qju/Fu3FFlPPrYbSuKUfOpVFXaUplELpKCLcKVXVzWLpK/FDdGQ==
+
+vuex@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/vuex/-/vuex-3.0.1.tgz#e761352ebe0af537d4bb755a9b9dc4be3df7efd2"
+  integrity sha512-wLoqz0B7DSZtgbWL1ShIBBCjv22GV5U+vcBFox658g6V0s4wZV9P4YjCNyoHSyIBpj1f29JBoNQIqD82cR4O3w==
 
 watchpack@^1.5.0:
   version "1.6.0"
