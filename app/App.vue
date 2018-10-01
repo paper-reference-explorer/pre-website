@@ -18,13 +18,13 @@
 
             <v-list subheader two-line>
                 <v-subheader>Added papers</v-subheader>
-                <template v-for="(item, index) in addedPapers">
+                <template v-for="(paper, index) in addedPapers">
                     <v-hover close-delay="0">
-                        <v-list-tile :key="item.title" @click="" slot-scope="{ hover }">
+                        <v-list-tile :key="paper.title" slot-scope="{ hover }">
                             <v-list-tile-content>
-                                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                                <v-list-tile-title>{{ paper.title }}</v-list-tile-title>
                                 <v-list-tile-sub-title>
-                                    {{ item["date-created"].substring(0, 4) }} - {{ item.authors }}
+                                    {{ paper["date-created"].substring(0, 4) }} - {{ paper.authors }}
                                 </v-list-tile-sub-title>
                             </v-list-tile-content>
 
