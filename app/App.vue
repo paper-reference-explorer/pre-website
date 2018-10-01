@@ -8,6 +8,12 @@
             width="326"
         > <!-- 320 (title width) + 6 (toolbar padding) = 326 -->
             <v-subheader>Information</v-subheader>
+            <p class="information">
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea,
+                nostrum odio. Dolores, sed accusantium quasi non, voluptas eius illo quas,
+                saepe voluptate pariatur in deleniti minus sint. Excepturi.
+            </p>
+
             <v-divider></v-divider>
 
             <v-list subheader two-line>
@@ -128,7 +134,7 @@
                         </v-flex>
                     </v-layout>
                 </v-container>
-                
+
                 <v-card-actions>
                     <v-btn flat color="primary">More</v-btn>
                     <v-spacer></v-spacer>
@@ -174,5 +180,9 @@
 
     .v-list__tile {
         padding: 0 20px !important; /* icons should start at 20 */
+    }
+
+    .information {
+        padding: 0 20px;
     }
 </style>

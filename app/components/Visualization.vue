@@ -72,7 +72,6 @@
     var startRadius = 0;
     var startFontSize = 0;
     var startColor = colorPalette[0];
-    console.log(colorPalette);
 
     export default {
         name: 'non-vue-line-chart',
