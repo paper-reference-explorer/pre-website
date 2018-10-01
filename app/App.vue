@@ -9,6 +9,7 @@
         > <!-- 320 (title width) + 6 (toolbar padding) = 326 -->
             <v-subheader>Information</v-subheader>
             <v-divider></v-divider>
+
             <v-list subheader two-line>
                 <v-subheader>Added papers</v-subheader>
                 <template v-for="item in addedPapers">
@@ -44,6 +45,7 @@
                 <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
                 <span class="hidden-sm-and-down">Paper references explorer</span>
             </v-toolbar-title>
+
             <v-text-field
                 flat
                 solo-inverted
@@ -52,7 +54,9 @@
                 label="Search"
                 class="hidden-sm-and-down"
             ></v-text-field>
+
             <v-spacer></v-spacer>
+
             <v-btn icon @click="dialog = !dialog">
                 <v-icon>help</v-icon>
             </v-btn>
@@ -66,11 +70,10 @@
 
         <v-dialog v-model="dialog" width="800px">
             <v-card>
-                <v-card-title
-                    class="grey lighten-4 py-4 title"
-                >
+                <v-card-title class="grey lighten-4 py-4 title">
                     Create contact
                 </v-card-title>
+
                 <v-container grid-list-sm class="pa-4">
                     <v-layout row wrap>
                         <v-flex xs12 align-center justify-space-between>
@@ -86,23 +89,27 @@
                                 ></v-text-field>
                             </v-layout>
                         </v-flex>
+
                         <v-flex xs6>
                             <v-text-field
                                 prepend-icon="business"
                                 placeholder="Company"
                             ></v-text-field>
                         </v-flex>
+
                         <v-flex xs6>
                             <v-text-field
                                 placeholder="Job title"
                             ></v-text-field>
                         </v-flex>
+
                         <v-flex xs12>
                             <v-text-field
                                 prepend-icon="mail"
                                 placeholder="Email"
                             ></v-text-field>
                         </v-flex>
+
                         <v-flex xs12>
                             <v-text-field
                                 type="tel"
@@ -111,6 +118,7 @@
                                 mask="phone"
                             ></v-text-field>
                         </v-flex>
+
                         <v-flex xs12>
                             <v-text-field
                                 prepend-icon="notes"
@@ -119,6 +127,7 @@
                         </v-flex>
                     </v-layout>
                 </v-container>
+                
                 <v-card-actions>
                     <v-btn flat color="primary">More</v-btn>
                     <v-spacer></v-spacer>
