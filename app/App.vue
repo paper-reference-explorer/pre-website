@@ -1,7 +1,7 @@
 <template>
     <v-app id="inspire">
         <Drawer
-            v-model="drawer"
+            ref="drawer"
         >
         </Drawer>
 
@@ -13,7 +13,7 @@
             fixed
         >
             <v-toolbar-title>
-                <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
+                <v-toolbar-side-icon @click.stop="$refs.drawer.toggleOpened()"></v-toolbar-side-icon>
                 <span class="hidden-sm-and-down">Paper references explorer</span>
             </v-toolbar-title>
 
@@ -80,8 +80,7 @@
             Visualization
         },
         data: () => ({
-            dialog: false,
-            drawer: true
+            dialog: false
         }),
         props: {
             source: String

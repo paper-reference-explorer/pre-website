@@ -4,8 +4,7 @@
         fixed
         app
         width="326"
-        v-bind:value="value"
-        v-on:value="$emit('value', $event.target.value)"
+        v-model="isOpen"
     > <!-- 320 (title width) + 6 (toolbar padding) = 326 -->
         <v-subheader>Information</v-subheader>
         <p class="information">
@@ -44,10 +43,8 @@
 <script>
     export default {
         name: "Drawer",
-        props: [
-            "value"
-        ],
         data: () => ({
+            isOpen: true,
             addedPapers: [
                 {"authors": "A et al.", "title": "My first paper", "date-created": "2018-09-01"},
                 {"authors": "B et al.", "title": "Friendly paper", "date-created": "2018-04-23"},
@@ -57,6 +54,9 @@
         methods: {
             deletePaper: function (index) {
                 this.$delete(this.addedPapers, index);
+            },
+            toggleOpened: function () {
+                this.isOpen = !this.isOpen;
             }
         }
     }
