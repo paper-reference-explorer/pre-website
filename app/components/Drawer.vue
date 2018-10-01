@@ -17,7 +17,7 @@
 
         <v-list subheader two-line>
             <v-subheader>Added papers</v-subheader>
-            <template v-for="(paper, index) in addedPapers">
+            <template v-for="(paper, index) in this.addedPapers">
                 <v-hover close-delay="0">
                     <v-list-tile :key="paper.title" slot-scope="{ hover }">
                         <v-list-tile-content>
@@ -43,17 +43,17 @@
 <script>
     export default {
         name: "Drawer",
+        computed: {
+            addedPapers() {
+                return this.$store.state.addedPapers
+            }
+        },
         data: () => ({
-            isOpen: true,
-            addedPapers: [
-                {"authors": "A et al.", "title": "My first paper", "date-created": "2018-09-01"},
-                {"authors": "B et al.", "title": "Friendly paper", "date-created": "2018-04-23"},
-                {"authors": "C et al.", "title": "Another friendly paper", "date-created": "2016-12-05"}
-            ]
+            isOpen: true
         }),
         methods: {
             deletePaper: function (index) {
-                this.$delete(this.addedPapers, index);
+                this.$store.dispatch("removePaper", index);
             },
             toggleOpened: function () {
                 this.isOpen = !this.isOpen;
