@@ -14,15 +14,7 @@
                 <span class="hidden-sm-and-down">Paper references explorer</span>
             </v-toolbar-title>
 
-            <v-text-field
-                flat
-                solo-inverted
-                hide-details
-                clearable
-                prepend-inner-icon="search"
-                label="Search"
-                class="hidden-sm-and-down"
-            ></v-text-field>
+            <Search></Search>
 
             <v-spacer></v-spacer>
 
@@ -45,11 +37,13 @@
     import Visualization from './Visualization.vue';
     import Drawer from "./Drawer.vue";
     import About from "./About.vue";
+    import Search from "./Search.vue";
 
     export default {
         components: {
             About,
             Drawer,
+            Search,
             Visualization
         },
         props: {
