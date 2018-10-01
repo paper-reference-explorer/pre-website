@@ -29,7 +29,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn icon @click="dialog = !dialog">
+            <v-btn icon @click="$refs.about.open()">
                 <v-icon>help</v-icon>
             </v-btn>
         </v-toolbar>
@@ -40,48 +40,24 @@
             </v-container>
         </v-content>
 
-        <v-dialog v-model="dialog" width="800px">
-            <v-card>
-                <v-card-title
-                    class="headline primary white--text"
-                    primary-title
-                >
-                    About
-                </v-card-title>
-
-                <v-card-text>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea,
-                    nostrum odio. Dolores, sed accusantium quasi non, voluptas eius illo quas,
-                    saepe voluptate pariatur in deleniti minus sint. Excepturi.
-                </v-card-text>
-
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                        color="primary"
-                        flat
-                        @click="dialog = false"
-                    >
-                        Close
-                    </v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog>
+        <About
+            ref="about"
+        >
+        </About>
     </v-app>
 </template>
 
 <script>
     import Visualization from './components/Visualization.vue';
     import Drawer from "./components/Drawer.vue";
+    import About from "./components/About.vue";
 
     export default {
         components: {
+            About,
             Drawer,
             Visualization
         },
-        data: () => ({
-            dialog: false
-        }),
         props: {
             source: String
         }
