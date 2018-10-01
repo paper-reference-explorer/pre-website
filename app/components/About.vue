@@ -31,12 +31,14 @@
 <script>
     export default {
         name: "About",
-        data: () => ({
-            isOpen: false
-        }),
-        methods: {
-            open: function () {
-                this.isOpen = true;
+        computed: {
+            isOpen: {
+                get: function () {
+                    return this.$store.state.isAboutVisible;
+                },
+                set: function (newValue) {
+                    this.$store.dispatch("setAboutStatus", newValue);
+                }
             }
         }
     }

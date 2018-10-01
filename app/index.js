@@ -27,6 +27,9 @@ var store = new Vuex.Store({
         },
         SET_DRAWER_STATUS(state, value) {
             state.isDrawerOpen = value;
+        },
+        SET_ABOUT_STATUS(state, value) {
+            state.isAboutVisible = value;
         }
     },
     actions: {
@@ -40,6 +43,12 @@ var store = new Vuex.Store({
             let oldValue = state.isDrawerOpen;
             let newValue = !oldValue;
             commit("SET_DRAWER_STATUS", newValue);
+        },
+        setAboutStatus({commit}, value) {
+            commit("SET_ABOUT_STATUS", value);
+        },
+        openAbout({commit}) {
+            commit("SET_ABOUT_STATUS", true);
         }
     }
 });

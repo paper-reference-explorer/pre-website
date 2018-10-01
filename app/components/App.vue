@@ -26,7 +26,7 @@
 
             <v-spacer></v-spacer>
 
-            <v-btn icon @click="$refs.about.open()">
+            <v-btn icon @click="$store.dispatch('openAbout')">
                 <v-icon>help</v-icon>
             </v-btn>
         </v-toolbar>
