@@ -14,6 +14,7 @@
     "url": "git@github.com:OndragKlaus/paper-references-explorer.git"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "d3": "^5.7.0",
     "d3-force": "^1.1.2",
     "es6-promise": "^4.2.5",
@@ -25,6 +26,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.0.0",
+    "axios-mock-adapter": "^1.15.0",
     "babel-loader": "8.0.2",
     "babel-plugin-syntax-dynamic-import": "6.18.0",
     "babel-preset-env": "1.7.0",
