@@ -7,14 +7,17 @@ var store = new Vuex.Store({
     state: {
         graphPapers: null,
         addedPapers: [
-            {"authors": "A et al.", "title": "My first paper", "date-created": "2018-09-01"},
-            {"authors": "B et al.", "title": "Friendly paper", "date-created": "2018-04-23"},
-            {"authors": "C et al.", "title": "Another friendly paper", "date-created": "2016-12-05"}
+            {"key": "A_my", "authors": "A et al.", "title": "My first paper", "year": "2018"},
+            {"key": "B_friendly", "authors": "B et al.", "title": "Friendly paper", "year": "2018"},
+            {"key": "C_another", "authors": "C et al.", "title": "Another friendly paper", "year": "2016"}
         ],
         isDrawerOpen: true,
         isAboutVisible: false
     },
     mutations: {
+        ADD_PAPER(state, paper) {
+            state.addedPapers.push(paper);
+        },
         REMOVE_PAPER(state, index) {
             state.addedPapers.splice(index, 1);
         },
@@ -26,6 +29,9 @@ var store = new Vuex.Store({
         }
     },
     actions: {
+        addPaper({commit}, paper) {
+            commit("ADD_PAPER", paper);
+        },
         removePaper({commit}, index) {
             commit("REMOVE_PAPER", index);
         },

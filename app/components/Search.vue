@@ -37,7 +37,7 @@
             },
             select(val) {
                 if (val) {
-                    console.log(val);
+                    this.$store.dispatch("addPaper", val);
                     this.select = undefined;
                     this.items = undefined;
                 }

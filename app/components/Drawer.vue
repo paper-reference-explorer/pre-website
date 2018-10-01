@@ -23,7 +23,7 @@
                         <v-list-tile-content>
                             <v-list-tile-title>{{ paper.title }}</v-list-tile-title>
                             <v-list-tile-sub-title>
-                                {{ paper["date-created"].substring(0, 4) }} - {{ paper.authors }}
+                                {{ paper.year }} - {{ paper.authors }}
                             </v-list-tile-sub-title>
                         </v-list-tile-content>
 
