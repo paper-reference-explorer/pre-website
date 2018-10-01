@@ -37,10 +37,7 @@
             </v-container>
         </v-content>
 
-        <About
-            ref="about"
-        >
-        </About>
+        <About></About>
     </v-app>
 </template>
 
