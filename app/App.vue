@@ -18,7 +18,7 @@
 
             <v-list subheader two-line>
                 <v-subheader>Added papers</v-subheader>
-                <template v-for="item in addedPapers">
+                <template v-for="(item, index) in addedPapers">
                     <v-hover close-delay="0">
                         <v-list-tile :key="item.title" @click="" slot-scope="{ hover }">
                             <v-list-tile-content>
@@ -30,7 +30,7 @@
 
                             <v-list-tile-action>
 
-                                <v-btn icon v-if="hover">
+                                <v-btn icon v-if="hover" @click="deletePaper(index)">
                                     <v-icon>delete</v-icon>
                                 </v-btn>
                             </v-list-tile-action>
@@ -123,6 +123,11 @@
         }),
         props: {
             source: String
+        },
+        methods: {
+            deletePaper: function(index) {
+                this.$delete(this.addedPapers, index);
+            }
         }
     }
 </script>
