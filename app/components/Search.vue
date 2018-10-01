@@ -1,5 +1,5 @@
 <template>
-    <v-text-field
+    <v-autocomplete
         flat
         solo-inverted
         hide-details
@@ -7,7 +7,7 @@
         prepend-inner-icon="search"
         label="Search"
         class="hidden-sm-and-down"
-    ></v-text-field>
+    ></v-autocomplete>
 </template>
 
 <script>
