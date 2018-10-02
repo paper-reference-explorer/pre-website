@@ -16,10 +16,31 @@
         <v-divider></v-divider>
 
         <v-list subheader two-line>
-            <v-subheader>Added papers</v-subheader>
-            <template v-for="(paper, index) in this.addedPapers">
-                <v-hover close-delay="0">
-                    <v-list-tile :key="paper.title" slot-scope="{ hover }">
+            <v-subheader>
+                <span>Added papers</span>
+
+                <v-spacer></v-spacer>
+
+                <v-btn
+                    flat
+                    small
+                    @click="$store.dispatch('removeAllPapers')"
+                    :disabled="$store.state.addedPapers.length === 0"
+                >
+                    Delete all
+                </v-btn>
+            </v-subheader>
+
+            <template
+                v-for="(paper, index) in this.addedPapers"
+            >
+                <v-hover
+                    close-delay="0"
+                >
+                    <v-list-tile
+                        :key="paper.title"
+                        slot-scope="{ hover }"
+                    >
                         <v-list-tile-content>
                             <v-list-tile-title>{{ paper.title }}</v-list-tile-title>
                             <v-list-tile-sub-title>
@@ -28,8 +49,11 @@
                         </v-list-tile-content>
 
                         <v-list-tile-action>
-
-                            <v-btn icon v-if="hover" @click="$store.dispatch('removePaper', index)">
+                            <v-btn
+                                v-if="hover"
+                                icon
+                                @click="$store.dispatch('removePaper', index)"
+                            >
                                 <v-icon>delete</v-icon>
                             </v-btn>
                         </v-list-tile-action>

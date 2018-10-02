@@ -7,20 +7,13 @@ import 'vuetify/dist/vuetify.min.css';
 import store from 'store.js';
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
+import {graphPapersExample, allPapersMock} from './example-data.js';
 
 Vue.use(Vuetify);
-var mock = new MockAdapter(axios, {delayResponse: 500});
+var mock = new MockAdapter(axios, {delayResponse: 1000});
 
-mock.onGet('/search').reply(200, {
-    papers: [
-        {"key": "A_my", "authors": "A et al.", "title": "My first paper", "year": "2018"},
-        {"key": "B_friendly", "authors": "B et al.", "title": "Friendly paper", "year": "2018"},
-        {"key": "C_another", "authors": "C et al.", "title": "Another friendly paper", "year": "2016"},
-        {"key": "D_old", "authors": "D et al.", "title": "Old paper", "year": "2013"},
-        {"key": "E_older", "authors": "E et al.", "title": "Older paper", "year": "2012"},
-        {"key": "F_young", "authors": "F et al.", "title": "Young paper", "year": "2016"}
-    ]
-});
+mock.onGet('/search').reply(200, {papers: allPapersMock});
+mock.onGet('/references').reply(200, {papers: graphPapersExample});
 
 /* eslint-disable no-new */
 new Vue({
