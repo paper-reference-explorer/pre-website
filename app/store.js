@@ -4,6 +4,21 @@ import axios from 'axios';
 
 Vue.use(Vuex);
 
+function updateReferences(addedPapers, successFunction, errorFunction, finalFunction) {
+    let keys = addedPapers.map(p => p.key);
+    axios.get('/references', {params: {papers: keys}})
+        .then((response) => {
+            successFunction(response);
+        })
+        .catch((error) => {
+            console.log(error);
+            errorFunction(error);
+        })
+        .then(() => {
+            finalFunction();
+        });
+}
+
 var store = new Vuex.Store({
     state: {
         graphPapers: [],
@@ -38,20 +53,29 @@ var store = new Vuex.Store({
     actions: {
         addPaper({commit, state}, paper) {
             commit("ADD_PAPER", paper);
-            let keys = state.addedPapers.map(p => p.key);
-            axios.get('/references', {params: {papers: keys}})
-                .then((response) => {
+            updateReferences(state.addedPapers,
+                (response) => {
                     let graphPapers = response.data.papers;
                     commit("SET_GRAPH_PAPERS", graphPapers);
-                })
-                .catch((error) => {
-                    console.log(error);
-                })
-                .then(() => {
-                });
+                },
+                (error) => {
+                },
+                () => {
+                }
+            );
         },
-        removePaper({commit}, index) {
+        removePaper({commit, state}, index) {
             commit("REMOVE_PAPER", index);
+            updateReferences(state.addedPapers,
+                (response) => {
+                    let graphPapers = response.data.papers;
+                    commit("SET_GRAPH_PAPERS", graphPapers);
+                },
+                (error) => {
+                },
+                () => {
+                }
+            );
         },
         removeAllPapers({commit}) {
             commit("REMOVE_ALL_PAPERS");
