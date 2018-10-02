@@ -74,6 +74,10 @@
                     var data = this.$store.state.graphPapers;
                     var nSections = data.length;
 
+                    if (nSections === undefined || nSections == null || nSections === 0) {
+                        return;
+                    }
+
                     var meta = getMeta(data, nSections);
                     var colorPalette = palette('tol-sq', meta["maximumReferencedLocal"] + 1);
 
