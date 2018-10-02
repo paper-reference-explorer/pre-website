@@ -9,7 +9,7 @@ import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
 
 Vue.use(Vuetify);
-var mock = new MockAdapter(axios, {delayResponse: 500});
+var mock = new MockAdapter(axios, {delayResponse: 1000});
 
 mock.onGet('/search').reply(200, {
     papers: [
