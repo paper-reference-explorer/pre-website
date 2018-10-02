@@ -25,6 +25,7 @@
                     flat
                     small
                     @click="$store.dispatch('removeAllPapers')"
+                    :disabled="$store.state.addedPapers.length === 0"
                 >
                     Delete all
                 </v-btn>
