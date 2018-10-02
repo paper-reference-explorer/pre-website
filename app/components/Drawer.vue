@@ -24,6 +24,7 @@
                 <v-btn
                     flat
                     small
+                    @click="$store.dispatch('removeAllPapers')"
                 >
                     Delete all
                 </v-btn>

@@ -25,6 +25,9 @@ var store = new Vuex.Store({
         REMOVE_PAPER(state, index) {
             state.addedPapers.splice(index, 1);
         },
+        REMOVE_ALL_PAPERS(state) {
+            state.addedPapers = [];
+        },
         SET_DRAWER_STATUS(state, value) {
             state.isDrawerOpen = value;
         },
@@ -49,6 +52,9 @@ var store = new Vuex.Store({
         },
         removePaper({commit}, index) {
             commit("REMOVE_PAPER", index);
+        },
+        removeAllPapers({commit}) {
+            commit("REMOVE_ALL_PAPERS");
         },
         setDrawerStatus({commit}, value) {
             commit("SET_DRAWER_STATUS", value);
