@@ -14,7 +14,7 @@
         :search-input.sync="search"
         v-model="select"
         no-filter
-        no-data-text=""
+        hide-no-data
     ></v-autocomplete>
 </template>
 
