@@ -30,14 +30,23 @@
                 fill-height
             >
                 <v-layout
-                    justify-center
                     align-center
+                    justify-center
+                    column
                 >
-                    Search for some papers to get started, <br/>
-                    or look at an example.
+                    <p class="font-weight-light display-1 text-xs-center">Search for some papers to get started</p>
+
+                    <p class="font-weight-light title">or</p>
+
+                    <v-btn
+                        color="primary"
+                        @click="$store.dispatch('loadExample')"
+                    >
+                        view example
+                    </v-btn>
                 </v-layout>
             </v-container>
-            
+
             <v-container
                 v-show="$store.state.graphPapers.length > 0"
             >

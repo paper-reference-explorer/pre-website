@@ -31,14 +31,17 @@ var store = new Vuex.Store({
         ADD_PAPER(state, paper) {
             state.addedPapers.push(paper);
         },
-        SET_GRAPH_PAPERS(state, graphPapers) {
-            state.graphPapers = graphPapers;
-        },
         REMOVE_PAPER(state, index) {
             state.addedPapers.splice(index, 1);
         },
         REMOVE_ALL_PAPERS(state) {
             state.addedPapers = [];
+        },
+        SET_ADDED_PAPERS(state, addedPapers) {
+            state.addedPapers = addedPapers;
+        },
+        SET_GRAPH_PAPERS(state, graphPapers) {
+            state.graphPapers = graphPapers;
         },
         SET_DRAWER_STATUS(state, value) {
             state.isDrawerOpen = value;
@@ -95,6 +98,10 @@ var store = new Vuex.Store({
         },
         openAbout({commit}) {
             commit("SET_ABOUT_STATUS", true);
+        },
+        loadExample({commit}) {
+            commit("SET_ADDED_PAPERS", addedPapersExample);
+            commit("SET_GRAPH_PAPERS", graphPapersExample);
         }
     }
 });
