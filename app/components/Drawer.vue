@@ -16,7 +16,19 @@
         <v-divider></v-divider>
 
         <v-list subheader two-line>
-            <v-subheader>Added papers</v-subheader>
+            <v-subheader>
+                <span>Added papers</span>
+
+                <v-spacer></v-spacer>
+
+                <v-btn
+                    flat
+                    small
+                >
+                    Delete all
+                </v-btn>
+            </v-subheader>
+
             <template v-for="(paper, index) in this.addedPapers">
                 <v-hover close-delay="0">
                     <v-list-tile :key="paper.title" slot-scope="{ hover }">
