@@ -25,7 +25,8 @@ var store = new Vuex.Store({
         graphPapers: [],
         addedPapers: [],
         isDrawerOpen: true,
-        isAboutVisible: false
+        isAboutVisible: false,
+        isWaitingForGraph: false
     },
     mutations: {
         ADD_PAPER(state, paper) {
@@ -48,11 +49,15 @@ var store = new Vuex.Store({
         },
         SET_ABOUT_STATUS(state, value) {
             state.isAboutVisible = value;
+        },
+        SET_WAITING_FOR_GRAPH(state, value) {
+            state.isWaitingForGraph = value;
         }
     },
     actions: {
         addPaper({commit, state}, paper) {
             commit("ADD_PAPER", paper);
+            commit("SET_WAITING_FOR_GRAPH", true);
             updateReferences(state.addedPapers,
                 (response) => {
                     let graphPapers = response.data.papers;
@@ -61,6 +66,7 @@ var store = new Vuex.Store({
                 (error) => {
                 },
                 () => {
+                    commit("SET_WAITING_FOR_GRAPH", false);
                 }
             );
         },
@@ -69,6 +75,7 @@ var store = new Vuex.Store({
             if (state.addedPapers.length === 0) {
                 commit("SET_GRAPH_PAPERS", []);
             } else {
+                commit("SET_WAITING_FOR_GRAPH", true);
                 updateReferences(state.addedPapers,
                     (response) => {
                         let graphPapers = response.data.papers;
@@ -77,6 +84,7 @@ var store = new Vuex.Store({
                     (error) => {
                     },
                     () => {
+                        commit("SET_WAITING_FOR_GRAPH", false);
                     }
                 );
             }

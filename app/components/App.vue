@@ -8,6 +8,8 @@
             dark
             app
             fixed
+            extended
+            :extension-height="extensionHeight"
         >
             <v-toolbar-title>
                 <v-toolbar-side-icon @click.stop="$store.dispatch('toggleDrawerStatus')"></v-toolbar-side-icon>
@@ -21,6 +23,14 @@
             <v-btn icon @click="$store.dispatch('openAbout')">
                 <v-icon>help</v-icon>
             </v-btn>
+
+            <v-progress-linear
+                v-show="$store.state.isWaitingForGraph"
+                slot="extension"
+                :indeterminate="true"
+                :height="extensionHeight"
+                color="accent"
+            ></v-progress-linear>
         </v-toolbar>
 
         <v-content>
@@ -73,18 +83,26 @@
         },
         props: {
             source: String
-        }
+        },
+        data: () => ({
+            extensionHeight: 4
+        })
     }
 </script>
 
 <style>
     .v-toolbar__content {
-        /* (6 + 12) (button margin) + 8 (icon specific margin) - 20 (icons should start at) = 6 */
-        padding: 0 20px 0 6px !important;
+        /* extensionHeight (top)
+        /* (6 + 12) (button margin) + 8 (icon specific margin) - 20 (icons should start at) = 6 (left)*/
+        padding: 4px 20px 0 6px !important;
     }
 
     .v-toolbar__title {
         width: 320px !important;
+    }
+
+    .v-toolbar__extension {
+        padding: 0 !important;
     }
 
     .v-list__tile {
