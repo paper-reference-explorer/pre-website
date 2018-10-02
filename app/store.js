@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Vuex from "vuex";
 import axios from 'axios';
+import {addedPapersExample, graphPapersExample} from './example-data.js';
 
 Vue.use(Vuex);
 
@@ -22,11 +23,7 @@ function updateReferences(addedPapers, successFunction, errorFunction, finalFunc
 var store = new Vuex.Store({
     state: {
         graphPapers: [],
-        addedPapers: [
-            {"key": "A_my", "authors": "A et al.", "title": "My first paper", "year": "2018"},
-            {"key": "B_friendly", "authors": "B et al.", "title": "Friendly paper", "year": "2018"},
-            {"key": "C_another", "authors": "C et al.", "title": "Another friendly paper", "year": "2016"}
-        ],
+        addedPapers: [],
         isDrawerOpen: true,
         isAboutVisible: false
     },
