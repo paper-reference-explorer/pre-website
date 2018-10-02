@@ -12,15 +12,24 @@
             :extension-height="extensionHeight"
         >
             <v-toolbar-title>
-                <v-toolbar-side-icon @click.stop="$store.dispatch('toggleDrawerStatus')"></v-toolbar-side-icon>
-                <span class="hidden-sm-and-down">Paper references explorer</span>
+                <v-toolbar-side-icon
+                    @click.stop="$store.dispatch('toggleDrawerStatus')"
+                ></v-toolbar-side-icon>
+                <span
+                    class="hidden-sm-and-down"
+                >
+                    Paper references explorer
+                </span>
             </v-toolbar-title>
 
             <Search></Search>
 
             <v-spacer></v-spacer>
 
-            <v-btn icon @click="$store.dispatch('openAbout')">
+            <v-btn
+                icon
+                @click="$store.dispatch('openAbout')"
+            >
                 <v-icon>help</v-icon>
             </v-btn>
 

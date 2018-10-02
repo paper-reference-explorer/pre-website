@@ -1,5 +1,8 @@
 <template>
-    <svg id="visualization" viewBox="0 0 100 100"></svg>
+    <svg
+        id="visualization"
+        viewBox="0 0 100 100"
+    ></svg>
 </template>
 
 <script>

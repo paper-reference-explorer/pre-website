@@ -1,5 +1,8 @@
 <template>
-    <v-dialog v-model="isOpen" width="800px">
+    <v-dialog
+        v-model="isOpen"
+        width="800px"
+    >
         <v-card>
             <v-card-title
                 class="headline primary white--text"
