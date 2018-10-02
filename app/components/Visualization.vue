@@ -3,7 +3,7 @@
 </template>
 
 <script>
-    import {constants} from './data.js';
+    import {constants} from '../config.js';
     import * as d3 from "d3";
     import palette from "google-palette";
 
