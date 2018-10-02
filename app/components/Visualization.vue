@@ -90,6 +90,7 @@
                     }
 
                     var svgSelection = d3.select("#visualization");
+                    svgSelection.selectAll("*").remove();
                     var div = d3.select("body").append("div")
                         .attr("class", "tooltip")
                         .style("opacity", 0);
