@@ -24,7 +24,23 @@
         </v-toolbar>
 
         <v-content>
-            <v-container>
+            <v-container
+                v-show="$store.state.graphPapers.length === 0"
+                fluid
+                fill-height
+            >
+                <v-layout
+                    justify-center
+                    align-center
+                >
+                    Search for some papers to get started, <br/>
+                    or look at an example.
+                </v-layout>
+            </v-container>
+            
+            <v-container
+                v-show="$store.state.graphPapers.length > 0"
+            >
                 <Visualization></Visualization>
             </v-container>
         </v-content>

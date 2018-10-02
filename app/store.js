@@ -66,19 +66,24 @@ var store = new Vuex.Store({
         },
         removePaper({commit, state}, index) {
             commit("REMOVE_PAPER", index);
-            updateReferences(state.addedPapers,
-                (response) => {
-                    let graphPapers = response.data.papers;
-                    commit("SET_GRAPH_PAPERS", graphPapers);
-                },
-                (error) => {
-                },
-                () => {
-                }
-            );
+            if (state.addedPapers.length === 0) {
+                commit("SET_GRAPH_PAPERS", []);
+            } else {
+                updateReferences(state.addedPapers,
+                    (response) => {
+                        let graphPapers = response.data.papers;
+                        commit("SET_GRAPH_PAPERS", graphPapers);
+                    },
+                    (error) => {
+                    },
+                    () => {
+                    }
+                );
+            }
         },
         removeAllPapers({commit}) {
             commit("REMOVE_ALL_PAPERS");
+            commit("SET_GRAPH_PAPERS", []);
         },
         setDrawerStatus({commit}, value) {
             commit("SET_DRAWER_STATUS", value);
