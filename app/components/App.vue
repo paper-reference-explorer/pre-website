@@ -68,8 +68,15 @@
 
             <v-container
                 v-show="$store.state.graphPapers.length > 0"
+                fill-height
             >
-                <Visualization></Visualization>
+                <v-layout
+                    align-center
+                    justify-center
+                    column
+                >
+                    <Visualization></Visualization>
+                </v-layout>
             </v-container>
         </v-content>
 
