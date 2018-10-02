@@ -1,11 +1,12 @@
 import Vue from 'vue';
 import Vuex from "vuex";
+import axios from 'axios';
 
 Vue.use(Vuex);
 
 var store = new Vuex.Store({
     state: {
-        graphPapers: null,
+        graphPapers: [],
         addedPapers: [
             {"key": "A_my", "authors": "A et al.", "title": "My first paper", "year": "2018"},
             {"key": "B_friendly", "authors": "B et al.", "title": "Friendly paper", "year": "2018"},
@@ -18,6 +19,9 @@ var store = new Vuex.Store({
         ADD_PAPER(state, paper) {
             state.addedPapers.push(paper);
         },
+        SET_GRAPH_PAPERS(state, graphPapers) {
+            state.graphPapers = graphPapers;
+        },
         REMOVE_PAPER(state, index) {
             state.addedPapers.splice(index, 1);
         },
@@ -29,8 +33,19 @@ var store = new Vuex.Store({
         }
     },
     actions: {
-        addPaper({commit}, paper) {
+        addPaper({commit, state}, paper) {
             commit("ADD_PAPER", paper);
+            let keys = state.addedPapers.map(p => p.key);
+            axios.get('/references', {params: {papers: keys}})
+                .then((response) => {
+                    let graphPapers = response.data.papers;
+                    commit("SET_GRAPH_PAPERS", graphPapers);
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+                .then(() => {
+                });
         },
         removePaper({commit}, index) {
             commit("REMOVE_PAPER", index);
