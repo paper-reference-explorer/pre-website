@@ -3,7 +3,6 @@ WORKDIR /usr/src/app
 
 COPY package.json .
 COPY yarn.lock .
-COPY node_modules .
 RUN yarn install
 
 COPY . .
