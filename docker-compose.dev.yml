@@ -22,6 +22,8 @@ services:
     website:
         build:
             context: .
-            target: prod
+            target: dev
+        volumes:
+            - .:/usr/src/app
         links:
             - search:search
