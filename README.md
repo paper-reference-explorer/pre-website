@@ -1,5 +1,8 @@
 # Paper references explorer
 
+![screenshot of the homepage](homepage.png "screenshot of the homepage")
+
+
 ## Dev
 We are currently building the search index. Instructions on how to add it will follow.
 
