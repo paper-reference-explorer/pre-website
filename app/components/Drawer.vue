@@ -17,7 +17,16 @@
 
         <v-list subheader two-line>
             <v-subheader>
-                <span>Added papers</span>
+                <span
+                    v-show="this.hasPapers"
+                >
+                    Added papers
+                </span>
+                <span
+                    v-show="!this.hasPapers"
+                >
+                    No papers added yet
+                </span>
 
                 <v-spacer></v-spacer>
 
@@ -25,7 +34,7 @@
                     flat
                     small
                     @click="$store.dispatch('removeAllPapers')"
-                    :disabled="$store.state.addedPapers.length === 0"
+                    :disabled="!this.hasPapers"
                 >
                     Delete all
                 </v-btn>
@@ -78,6 +87,9 @@
             },
             addedPapers() {
                 return this.$store.state.addedPapers;
+            },
+            hasPapers() {
+                return this.$store.state.addedPapers.length > 0;
             }
         }
     }
