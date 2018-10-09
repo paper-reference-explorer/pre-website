@@ -1,29 +1,7 @@
 version: '3.7'
 services:
-    search:
-        image: mosuka/blast:v0.3.2
-        restart: always
-        ports:
-            - 10000:10000
-            - 10001:10001
-            - 10002:10002
-        environment:
-            BLAST_BIND_ADDR: search:10000
-            BLAST_GRPC_ADDR: search:10001
-            BLAST_HTTP_ADDR: search:10002
-            BLAST_RAFT_NODE_ID: node1
-            BLAST_RAFT_DIR: /search/node1/raft
-            BLAST_STORE_DIR: /search/node1/store
-            BLAST_INDEX_DIR: /search/node1/index
-            BLAST_INDEX_MAPPING: /search/index_mapping.json
-        volumes:
-            - ./search:/search
-        command: start
     website:
         build:
             context: .
-            target: dev
         volumes:
             - .:/usr/src/app
-        links:
-            - search:search
