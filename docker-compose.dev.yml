@@ -2,6 +2,6 @@ version: '3.7'
 services:
     website:
         build:
-            context: .
+            target: dev
         volumes:
             - .:/usr/src/app
