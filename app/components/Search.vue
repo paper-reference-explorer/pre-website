@@ -69,7 +69,12 @@
                         var papers = response.data.search_result.hits;
                         this.items = papers.map(function (p) {
                             return {
-                                "paper": p.id,
+                                "paper": {
+                                    "key": p.id,
+                                    "year": p.fields.year,
+                                    "authors": p.fields.authors,
+                                    "title": p.fields.title
+                                },
                                 "description": p.fields.year + " - " + p.fields.authors + " " + p.fields.title
                             }
                         });
