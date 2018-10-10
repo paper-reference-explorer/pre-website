@@ -87,13 +87,4 @@ var graphPapersExample = [
     }
 ];
 
-var allPapersMock = [
-    {"key": "A_my", "authors": "A et al.", "title": "My first paper", "year": "2018"},
-    {"key": "B_friendly", "authors": "B et al.", "title": "Friendly paper", "year": "2018"},
-    {"key": "C_another", "authors": "C et al.", "title": "Another friendly paper", "year": "2016"},
-    {"key": "D_old", "authors": "D et al.", "title": "Old paper", "year": "2013"},
-    {"key": "E_older", "authors": "E et al.", "title": "Older paper", "year": "2012"},
-    {"key": "F_young", "authors": "F et al.", "title": "Young paper", "year": "2016"}
-];
-
-export {addedPapersExample, graphPapersExample, allPapersMock};
+export {addedPapersExample, graphPapersExample};
