@@ -64,7 +64,7 @@
                     }
                 };
 
-                axios.post('http://www.localhost/rest/_search', parameters)
+                axios.post('/rest/_search', parameters)
                     .then((response) => {
                         var papers = response.data.search_result.hits;
                         this.items = papers.map(function (p) {
