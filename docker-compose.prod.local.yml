@@ -1,5 +1,17 @@
 version: '3.7'
 services:
+    reverse-proxy:
+        image: traefik:latest
+        command:
+            - "--api"
+            - "--defaultentrypoints=http"
+            - "--docker"
+            - "--docker.domain=localhost"
+        ports:
+            - 80:80
+            - 8080:8080
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
     search:
         labels:
             - "traefik.pre.frontend.rule=Host:pre.localhost;Method:Post;Path:/rest/_search"

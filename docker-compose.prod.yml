@@ -1,17 +1,5 @@
 version: '3.7'
 services:
-    reverse-proxy:
-        image: traefik:latest
-        command:
-            - "--api"
-            - "--defaultentrypoints=http"
-            - "--docker"
-            - "--docker.domain=localhost"
-        ports:
-            - 80:80
-            - 8080:8080
-        volumes:
-            - /var/run/docker.sock:/var/run/docker.sock
     search:
         image: mosuka/blast:v0.3.2
         restart: always
@@ -32,6 +20,8 @@ services:
             - "traefik.pre.protocol=http"
             - "traefik.pre.port=10002"
             - "traefik.pre.frontend.rule=Host:pre.klausondrag.com;Method:Post;Path:/rest/_search"
+        networks:
+            - public-access
     website:
         image: paper-references-explorer-website_website:latest
         labels:
@@ -39,3 +29,9 @@ services:
             - "traefik.pre.protocol=http"
             - "traefik.pre.port=80"
             - "traefik.pre.frontend.rule=Host:pre.klausondrag.com"
+        networks:
+            - public-access
+networks:
+    public-access:
+        external:
+            name: public-access
