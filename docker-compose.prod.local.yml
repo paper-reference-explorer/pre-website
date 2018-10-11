@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+    search:
+        labels:
+            - "traefik.basic.frontend.rule=Host:pre.localhost;Method:Post;Path:/rest/_search"
+    website:
+        build:
+            context: .
+            target: prod
+            network: host
+        labels:
+            - "traefik.basic.frontend.rule=Host:pre.localhost"
