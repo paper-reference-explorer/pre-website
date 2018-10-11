@@ -7,4 +7,4 @@ services:
             - ./app:/usr/src/app/app
             - ./index.ejs:/usr/src/app/index.ejs
         labels:
-            - "traefik.basic.port=8080"
+            - "traefik.pre.port=8080"
