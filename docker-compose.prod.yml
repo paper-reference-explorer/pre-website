@@ -34,8 +34,6 @@ services:
             - "traefik.pre.frontend.rule=Host:pre.klausondrag.com;Method:Post;Path:/rest/_search"
     website:
         image: paper-references-explorer-website_website:latest
-        links:
-            - search:search
         labels:
             - "traefik.enable=true"
             - "traefik.pre.protocol=http"
