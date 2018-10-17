@@ -9,6 +9,10 @@ The explorer gives you an overview on all papers your given papers are referenci
 - number of times a paper was referenced by your paper
 - visually highlight papers that are more important for your added papers
 
+## ToDo
+- [ ] Setup the backend for the data
+- [ ] Style the overview page
+
 ## Dev
 
 ### Setup
