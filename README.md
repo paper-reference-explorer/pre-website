@@ -1,4 +1,17 @@
 # Paper references explorer
+The explorer gives you an overview on all papers your given papers are referencing. 
+
+## How to use?
+1. Add a list of papers you want to analyse
+2. Get the overview on all the papers your added papers are referencing.
+
+## Features
+- number of times a paper was referenced by your paper
+- visually highlight papers that are more important for your added papers
+
+## ToDo
+- [ ] Setup the backend for the data
+- [ ] Style the overview page
 
 ## Dev
 
