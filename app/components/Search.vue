@@ -46,15 +46,38 @@
         methods: {
             querySelections(query) {
                 this.loading = true;
-                axios.get('/search', {params: {keyword: query}})
+                var parameters = {
+                    "search_request": {
+                        "query": {
+                            "query": query
+                        },
+                        "size": 10,
+                        "from": 0,
+                        "fields": [
+                            "*"
+                        ],
+                        "sort": [
+                            "-_score"
+                        ],
+                        "facets": {},
+                        "highlight": {}
+                    }
+                };
+
+                axios.post('/rest/_search', parameters)
                     .then((response) => {
-                        this.items = response.data.papers
-                            .map(function (p) {
-                                return {
-                                    "paper": p,
-                                    "description": p.year + " - " + p.authors + " " + p.title
-                                }
-                            });
+                        var papers = response.data.search_result.hits;
+                        this.items = papers.map(function (p) {
+                            return {
+                                "paper": {
+                                    "key": p.id,
+                                    "year": p.fields.year,
+                                    "authors": p.fields.authors,
+                                    "title": p.fields.title
+                                },
+                                "description": p.fields.year + " - " + p.fields.authors + " " + p.fields.title
+                            }
+                        });
                     })
                     .catch((error) => {
                         console.log(error);
