@@ -12,6 +12,8 @@ services:
             - 8080:8080
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
+        networks:
+          - public-access
     search:
         labels:
             - "traefik.pre.frontend.rule=Host:pre.localhost;Method:Post;Path:/rest/_search"
@@ -22,3 +24,7 @@ services:
             network: host
         labels:
             - "traefik.pre.frontend.rule=Host:pre.localhost"
+networks:
+  public-access:
+    driver: bridge
+    name: public-access
