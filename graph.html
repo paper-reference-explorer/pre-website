@@ -165,6 +165,8 @@
         .on("drag", drag_drag)
         .on("end", drag_end);
 
+    drag_handler(node);
+
     function drag_start(d) {
         if (!d3.event.active) force.alphaTarget(0.3).restart();
         d.fx = d.x;
