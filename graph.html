@@ -96,11 +96,11 @@
 
 
     function circleColor(d) {
-        if (d.year == 0) {
+        if (d.year === 0) {
             return "#000";
-        } else if (d.year == 1) {
+        } else if (d.year === 1) {
             return "#444";
-        } else if (d.year == 2) {
+        } else if (d.year === 2) {
             return "#888";
         } else {
             return "#ccc";
@@ -108,7 +108,7 @@
     }
 
     function linkColor(d) {
-        if (d.type == "A") {
+        if (d.type === "A") {
             return "green";
         } else {
             return "red";
