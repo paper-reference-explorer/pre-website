@@ -97,10 +97,13 @@
         colorMax = "#9C27B0",
         maxTitleLength = 20,
         collisionRadius = 100,
+        hoverRadius = 100,
         labelFontSizePixels = 20,
         labelFontSizeString = labelFontSizePixels + "px",
         defaultTextOpacity = 0.85,
-        defaultStrokeOpacity = 0.5
+        defaultStrokeOpacity = 0.5,
+        arrowSize = 4,
+        linkOffsetForArrow = arrowSize * 4
     ;
 
     var radiusScale = d3.scaleLog()
@@ -178,9 +181,9 @@
                 .append("marker")
                 .attr("id", id)
                 .attr("viewBox", "0 -5 10 10")
-                .attr("refX", radius + 6)
-                .attr("markerWidth", 3)
-                .attr("markerHeight", 3)
+                .attr("refX", 0)
+                .attr("markerWidth", arrowSize)
+                .attr("markerHeight", arrowSize)
                 .attr("orient", "auto")
                 .append("path")
                 .attr("d", "M0,-5L10,0L0,5")
@@ -212,7 +215,7 @@
 
     node
         .append("circle")
-        .attr("r", 150)
+        .attr("r", hoverRadius)
         .attr("fill-opacity", 0)
         .attr("stroke-opacity", 0)
     ;
@@ -379,19 +382,28 @@
             .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
         ;
 
-        visibleLink
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y)
-        ;
+        function tickLink(l) {
+            l
+                .attr("x1", d => d.source.x)
+                .attr("y1", d => d.source.y)
+                .attr("x2", function (d) {
+                    var diffY = d.target.y - d.source.y,
+                        diffX = d.target.x - d.source.x;
+                    var pathLength = Math.sqrt((diffX * diffX) + (diffY * diffY));
+                    var offsetX = diffX * (d.target.radius + linkOffsetForArrow) / pathLength;
+                    return d.target.x - offsetX;
+                })
+                .attr("y2", function (d) {
+                    var diffY = d.target.y - d.source.y,
+                        diffX = d.target.x - d.source.x;
+                    var pathLength = Math.sqrt((diffX * diffX) + (diffY * diffY));
+                    var offsetY = diffY * (d.target.radius + linkOffsetForArrow) / pathLength;
+                    return d.target.y - offsetY;
+                })
+        }
 
-        hoverLink
-            .attr("x1", d => d.source.x)
-            .attr("y1", d => d.source.y)
-            .attr("x2", d => d.target.x)
-            .attr("y2", d => d.target.y)
-        ;
+        tickLink(visibleLink);
+        tickLink(hoverLink);
     }
 
     var drag_handler = d3
