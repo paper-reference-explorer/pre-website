@@ -67,19 +67,7 @@
     ;
 
     force
-        .force("collision_force", d3.forceCollide(function (d) {
-            var nElements;
-            if (d.year == 0) {
-                nElements = 4;
-            } else if (d.year == 1) {
-                nElements = 3;
-            } else if (d.year == 2) {
-                nElements = 1;
-            } else {
-                nElements = 3;
-            }
-            return 100; //nElements * 20;
-        }).strength(1))
+        .force("collision_force", d3.forceCollide(100).strength(1))
         .force("link_force", d3.forceLink(links_data)
             .id(function (d) {
                 return d.name;
