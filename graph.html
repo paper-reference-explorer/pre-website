@@ -85,7 +85,37 @@
             return "red";
         }
     }
-    
+
+    force.on("tick", tickActions);
+
+    function tickActions() {
+        node
+            .attr("cx", function (d) {
+                return d.x = Math.max(radius, Math.min(width - radius, d.x));
+            })
+            .attr("cy", function (d) {
+                min_offset = height / 4.0 * d.year;
+                max_offset = height / 4.0 * (d.year + 1);
+                return d.y = Math.max(radius + min_offset, Math.min(max_offset - radius, d.y));
+            })
+        ;
+
+        link
+            .attr("x1", function (d) {
+                return d.source.x;
+            })
+            .attr("y1", function (d) {
+                return d.source.y;
+            })
+            .attr("x2", function (d) {
+                return d.target.x;
+            })
+            .attr("y2", function (d) {
+                return d.target.y;
+            })
+        ;
+    }
+
     var drag_handler = d3.drag()
         .on("start", drag_start)
         .on("drag", drag_drag)
