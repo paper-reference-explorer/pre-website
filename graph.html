@@ -161,23 +161,31 @@
         .force("position_force_X", d3.forceX(width / 2).strength(0.2))
     ;
 
-    var link = svg.append("g")
+    var link = svg
+        .append("g")
         .attr("class", "links")
         .selectAll("line")
         .data(linksData)
         .enter()
-        .append("line")
-        .attr("stroke-width", 4)
-        .style("stroke", function (l) {
-            return colorScale(1);
-        })
+        .append("g")
         .on('mouseover', fadeLink(0.5, 0.1, 0.5, 0.25, true))
         .on('mouseout', fadeLink(1.0, 1.0, 1.0, 1.0, false))
+    ;
+    var visibleLink = link
+        .append("line")
+        .attr("stroke-width", 4)
+        .style("stroke", colorScale(1))
+    ;
+    var hoverLink = link
+        .append("line")
+        .attr("stroke-width", 48)
+        .style("stroke", "transparent")
     ;
 
     var defaultTextOpacity = 0.85,
         defaultStrokeOpacity = 0.5;
-    var node = svg.append("g")
+    var node = svg
+        .append("g")
         .attr("class", "nodes")
         .selectAll("circle")
         .data(nodesData)
@@ -319,7 +327,8 @@
                 .duration(hoverTransitionDuration)
                 .style("stroke-opacity", function (l) {
                     return isPartOfLink(d, l) ? 1 : linkOpacity;
-                });
+                })
+            ;
         };
     }
 
@@ -356,7 +365,8 @@
                 .duration(hoverTransitionDuration)
                 .style("stroke-opacity", function (l2) {
                     return isPartOfLink(l2.source, l) && isPartOfLink(l2.target, l) ? 1 : linkOpacity;
-                });
+                })
+            ;
         };
     }
 
@@ -377,7 +387,22 @@
             })
         ;
 
-        link
+        visibleLink
+            .attr("x1", function (d) {
+                return d.source.x;
+            })
+            .attr("y1", function (d) {
+                return d.source.y;
+            })
+            .attr("x2", function (d) {
+                return d.target.x;
+            })
+            .attr("y2", function (d) {
+                return d.target.y;
+            })
+        ;
+
+        hoverLink
             .attr("x1", function (d) {
                 return d.source.x;
             })
