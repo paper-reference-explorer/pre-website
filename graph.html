@@ -55,7 +55,10 @@
         height = +svg.attr("height");
 
     var force = d3.forceSimulation()
-        .nodes(nodes_data);
+        .nodes(nodes_data)
+        .alpha(0.25)
+        .alphaMin(0.01)
+    ;
 
     force
         .force("collision_force", d3.forceCollide(function (d) {
