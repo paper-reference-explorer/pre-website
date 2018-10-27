@@ -120,7 +120,7 @@
     var svg = d3.select("svg"),
         width = +svg.attr("width"),
         height = +svg.attr("height");
-    var defs = svg.append('defs');
+    var defs = svg.append("defs");
 
     var yearHeight = height / nYears;
 
@@ -129,7 +129,7 @@
         .nodes(nodesData)
         .alpha(0.25)
         .alphaMin(0.05)
-        .on('end', function () {
+        .on("end", function () {
             force.force("collision_force", null);
             force.force("position_force_Y", null);
             force.force("position_force_X", null);
@@ -151,8 +151,8 @@
         .data(linksData)
         .enter()
         .append("g")
-        .on('mouseover', fadeLink(0.5, 0.1, 0.5, 0.25, true))
-        .on('mouseout', fadeLink(1.0, 1.0, 1.0, 1.0, false))
+        .on("mouseover", fadeLink(0.5, 0.1, 0.5, 0.25, true))
+        .on("mouseout", fadeLink(1.0, 1.0, 1.0, 1.0, false))
     ;
 
     var visibleLink = link
@@ -174,8 +174,8 @@
         .data(nodesData)
         .enter()
         .append("g")
-        .on('mouseover', fadeNode(0.5, 0.1, 0.5, 0.25, true))
-        .on('mouseout', fadeNode(1.0, 1.0, 1.0, 1.0, false))
+        .on("mouseover", fadeNode(0.5, 0.1, 0.5, 0.25, true))
+        .on("mouseout", fadeNode(1.0, 1.0, 1.0, 1.0, false))
     ;
 
     node
@@ -217,22 +217,22 @@
     function makeFilter(id, isSelected) {
         if (defs.selectAll("#" + id).empty()) {
             var filter = defs
-                .append('filter')
-                .attr('id', id)
-                .attr('height', '200%')
+                .append("filter")
+                .attr("id", id)
+                .attr("height", "200%")
             ;
 
             filter
-                .append('feGaussianBlur')
-                .attr('in', 'SourceAlpha')
-                .attr('stdDeviation', isSelected ? 3 : 1)
-                .attr('result', 'blur')
+                .append("feGaussianBlur")
+                .attr("in", "SourceAlpha")
+                .attr("stdDeviation", isSelected ? 3 : 1)
+                .attr("result", "blur")
             ;
 
             filter
-                .append('feOffset')
-                .attr('in', 'blur')
-                .attr('result', 'offsetBlur')
+                .append("feOffset")
+                .attr("in", "blur")
+                .attr("result", "offsetBlur")
             ;
 
             filter
@@ -251,11 +251,11 @@
                 .attr("result", "offsetBlur")
             ;
 
-            var feMerge = filter.append('feMerge');
-            feMerge.append('feMergeNode').attr('in', 'offsetBlur');
-            feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
+            var feMerge = filter.append("feMerge");
+            feMerge.append("feMergeNode").attr("in", "offsetBlur");
+            feMerge.append("feMergeNode").attr("in", "SourceGraphic");
         }
-        return 'url(#' + id + ")"
+        return "url(#" + id + ")"
     }
 
     function isConnected(a, b) {
