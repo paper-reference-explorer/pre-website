@@ -40,12 +40,42 @@
         {"source": "Jamie", "target": "Mauer", "type": "A"}
     ];
 
+    var radius = 15,
+        padding = 5, // separation between same-color circles
+        clusterPadding = 6, // separation between different-color circles
+        maxRadius = 15;
+
     var svg = d3.select("svg"),
         width = +svg.attr("width"),
         height = +svg.attr("height");
 
     var force = d3.forceSimulation()
         .nodes(nodes_data);
+
+    force
+        .force("collision_force", d3.forceCollide(function (d) {
+            var nElements;
+            if (d.year == 0) {
+                nElements = 4;
+            } else if (d.year == 1) {
+                nElements = 3;
+            } else if (d.year == 2) {
+                nElements = 1;
+            } else {
+                nElements = 3;
+            }
+            return 100; //nElements * 20;
+        }).strength(1))
+        .force("link_force", d3.forceLink(links_data)
+            .id(function (d) {
+                return d.name;
+            })
+            .strength(0.1))
+        .force("position_force_Y", d3.forceY(function (d) {
+            return height / 4.0 * (d.year + 0.5)
+        }).strength(3))
+        .force("position_force_X", d3.forceX(width / 2).strength(0.2))
+    ;
 
     var link = svg.append("g")
         .attr("class", "links")
