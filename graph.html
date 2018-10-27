@@ -107,7 +107,9 @@
     var minimumRadius = 50,
         maximumRadius = 20,
         colorMin = "white",
-        colorMax = "red";
+        colorMax = "#9C27B0";
+    var maxTitleLength = 20,
+        collisionRadius = 100;
 
     var radiusScale = d3.scaleLog()
         .domain([minimumReferencedGlobal + 1, maximumReferencedGlobal + 1]) // must not be zero => + 1
@@ -135,7 +137,7 @@
     var force = d3.forceSimulation()
         .nodes(nodesData)
         .alpha(0.25)
-        .alphaMin(0.01)
+        .alphaMin(0.05)
         .on('end', function () {
             force.force("collision_force", null);
             force.force("position_force_Y", null);
@@ -145,7 +147,7 @@
     ;
 
     force
-        .force("collision_force", d3.forceCollide(100).strength(1))
+        .force("collision_force", d3.forceCollide(collisionRadius).strength(1))
         .force("link_force", d3.forceLink(linksData)
             .id(function (d) {
                 return d.key;
@@ -174,6 +176,9 @@
         .selectAll("circle")
         .data(nodesData)
         .enter()
+        .append("g")
+    ;
+    node
         .append("circle")
         .attr("r", function (p) {
             return p.radius;
@@ -189,6 +194,21 @@
         })
         .on('mouseout', function (d) {
             d3.select(this).style("filter", getFilter);
+        })
+    ;
+
+    node
+        .append("text")
+        .attr("dx", 0)
+        .attr("dy", ".35em")
+        .text(function (d) {
+            var text;
+            if (d.title.length > maxTitleLength) {
+                text = d.title.substring(0, maxTitleLength) + "…";
+            } else {
+                text = d.title;
+            }
+            return text;
         })
     ;
 
@@ -249,6 +269,9 @@
                 var min_offset = yearHeight * d.year;
                 var max_offset = yearHeight * (d.year + 1);
                 return d.y = Math.max(d.radius + min_offset, Math.min(max_offset - d.radius, d.y));
+            })
+            .attr("transform", function (d) {
+                return "translate(" + d.x + "," + d.y + ")";
             })
         ;
 
