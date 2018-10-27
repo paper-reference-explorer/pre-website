@@ -4,8 +4,8 @@
 
         <v-toolbar
             :clipped-left="$vuetify.breakpoint.lgAndUp"
-            color="blue darken-3"
             dark
+            color="primary"
             app
             fixed
             extended
