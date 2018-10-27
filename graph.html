@@ -244,19 +244,17 @@
             ;
 
             var feMerge = filter.append('feMerge');
-            feMerge.append('feMergeNode')
-                .attr('in', 'offsetBlur');
-            feMerge.append('feMergeNode')
-                .attr('in', 'SourceGraphic');
+            feMerge.append('feMergeNode').attr('in', 'offsetBlur');
+            feMerge.append('feMergeNode').attr('in', 'SourceGraphic');
         }
         return 'url(#' + id + ")"
     }
 
     function isConnected(a, b) {
         return linksData.some(function (l) {
-            return (l.source.key === a.key && l.target.key === b.key)
-                || (l.source.key === b.key && l.target.key === a.key)
-                || a.key === b.key;
+            return a.key === b.key
+                || (l.source.key === a.key && l.target.key === b.key)
+                || (l.source.key === b.key && l.target.key === a.key);
         });
     }
 
