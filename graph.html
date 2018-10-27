@@ -14,7 +14,7 @@
 <script src="https://d3js.org/d3.v4.min.js"></script>
 
 <script>
-    var nodes_data = [
+    var nodesData = [
         {
             "key": "A_my",
             "authors": "A et al.",
@@ -71,25 +71,32 @@
         }
     ];
 
-    var n_years = 3;
-
-    var links_data = [
+    var linksData = [
         {"source": "A_my", "target": "D_old"},
         {"source": "B_friendly", "target": "D_old"},
         {"source": "B_friendly", "target": "E_older"},
         {"source": "C_another", "target": "F_young"},
     ];
 
-    var radius = 15;
+    nodesData.forEach(function (p) {
+        p.radius = 15;
+    });
+
+    var nYears = 3,
+        maximumReferencedGlobal = 412,
+        maximumReferencedLocal = 2;
+
+    var minimumRadius = 5,
+        maximumRadius = 15;
 
     var svg = d3.select("svg"),
         width = +svg.attr("width"),
         height = +svg.attr("height");
 
-    var year_height = height / n_years;
+    var yearHeight = height / nYears;
 
     var force = d3.forceSimulation()
-        .nodes(nodes_data)
+        .nodes(nodesData)
         .alpha(0.25)
         .alphaMin(0.01)
         .on('end', function () {
@@ -102,13 +109,13 @@
 
     force
         .force("collision_force", d3.forceCollide(100).strength(1))
-        .force("link_force", d3.forceLink(links_data)
+        .force("link_force", d3.forceLink(linksData)
             .id(function (d) {
                 return d.key;
             })
             .strength(0.1))
         .force("position_force_Y", d3.forceY(function (d) {
-            return year_height  * (d.year + 0.5)
+            return yearHeight * (d.year + 0.5)
         }).strength(3))
         .force("position_force_X", d3.forceX(width / 2).strength(0.2))
     ;
@@ -116,7 +123,7 @@
     var link = svg.append("g")
         .attr("class", "links")
         .selectAll("line")
-        .data(links_data)
+        .data(linksData)
         .enter()
         .append("line")
         .attr("stroke-width", 2)
@@ -125,10 +132,12 @@
     var node = svg.append("g")
         .attr("class", "nodes")
         .selectAll("circle")
-        .data(nodes_data)
+        .data(nodesData)
         .enter()
         .append("circle")
-        .attr("r", radius)
+        .attr("r", function (p) {
+            return logslider(p["referenced-n-times-global"], maximumReferencedGlobal)
+        })
         .attr("fill", circleColor);
 
 
@@ -157,12 +166,12 @@
     function tickActions() {
         node
             .attr("cx", function (d) {
-                return d.x = Math.max(radius, Math.min(width - radius, d.x));
+                return d.x = Math.max(d.radius, Math.min(width - d.radius, d.x));
             })
             .attr("cy", function (d) {
-                var min_offset = year_height * d.year;
-                var max_offset = year_height * (d.year + 1);
-                return d.y = Math.max(radius + min_offset, Math.min(max_offset - radius, d.y));
+                var min_offset = yearHeight * d.year;
+                var max_offset = yearHeight * (d.year + 1);
+                return d.y = Math.max(d.radius + min_offset, Math.min(max_offset - d.radius, d.y));
             })
         ;
 
@@ -204,6 +213,22 @@
         if (!d3.event.active) force.alphaTarget(0);
         d.fx = null;
         d.fy = null;
+    }
+
+
+    // https://stackoverflow.com/questions/846221/logarithmic-slider
+    function logslider(position, nElements) {
+        // position will be between 0 and 100
+        var minp = 0;
+        var maxp = nElements;
+
+        var minv = Math.log(minimumRadius);
+        var maxv = Math.log(maximumRadius);
+
+        // calculate adjustment factor
+        var scale = (maxv - minv) / (maxp - minp);
+
+        return Math.exp(minv + scale * (position - minp));
     }
 </script>
 </body>
