@@ -171,6 +171,8 @@
         .style("stroke", function (l) {
             return colorScale(1);
         })
+        .on('mouseover', fadeLink(0.5, 0.1, 0.5, 0.25, true))
+        .on('mouseout', fadeLink(1.0, 1.0, 1.0, 1.0, false))
     ;
 
     var defaultTextOpacity = 0.85,
@@ -181,8 +183,8 @@
         .data(nodesData)
         .enter()
         .append("g")
-        .on('mouseover', fade(0.5, 0.1, 0.5, 0.25, true))
-        .on('mouseout', fade(1.0, 1.0, 1.0, 1.0, false))
+        .on('mouseover', fadeNode(0.5, 0.1, 0.5, 0.25, true))
+        .on('mouseout', fadeNode(1.0, 1.0, 1.0, 1.0, false))
     ;
     node
         .append("circle")
@@ -273,8 +275,12 @@
         });
     }
 
+    function isPartOfLink(n, l) {
+        return n.key === l.source.key || n.key === l.target.key;
+    }
+
     // http://bl.ocks.org/martinjc/396926c15afa2ab0127322a01d97b5f4
-    function fade(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
+    function fadeNode(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
         return function (d) {
             node
                 .select("circle")
@@ -302,8 +308,42 @@
                     return isConnected(d, o) ? 1 : strokeOpacity;
                 })
             ;
-            link.style("stroke-opacity", function (o) {
-                return o.source === d || o.target === d ? 1 : linkOpacity;
+            link.style("stroke-opacity", function (l) {
+                return isPartOfLink(d, l) ? 1 : linkOpacity;
+            });
+        };
+    }
+
+    function fadeLink(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
+        return function (l) {
+            node
+                .select("circle")
+                .style("stroke-opacity", function (o) {
+                    return isPartOfLink(o, l) ? 1 : strokeOpacity;
+                })
+                .style("fill-opacity", function (o) {
+                    return isPartOfLink(o, l) ? 1 : fillOpacity;
+                })
+                .style("filter", function (o) {
+                    if (isHoverMode) {
+                        if (isPartOfLink(o, l)) {
+                            return getFilterSelected(o)
+                        } else {
+                            return ""
+                        }
+                    } else {
+                        return getFilter(o);
+                    }
+                })
+            ;
+            node
+                .select("text")
+                .style("opacity", function (o) {
+                    return isPartOfLink(o, l) ? 1 : strokeOpacity;
+                })
+            ;
+            link.style("stroke-opacity", function (l2) {
+                return isPartOfLink(l2.source, l) && isPartOfLink(l2.target, l) ? 1 : linkOpacity;
             });
         };
     }
