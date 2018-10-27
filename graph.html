@@ -84,34 +84,23 @@
         {"source": "C_another", "target": "F_young"},
     ];
 
-    var minimumReferencedGlobal = Math.min.apply(Math, nodesData.map(function (p) {
-        return p["referenced-n-times-global"];
-    }));
-
-    var maximumReferencedGlobal = Math.max.apply(Math, nodesData.map(function (p) {
-        return p["referenced-n-times-global"];
-    }));
-
-    var minimumReferencedLocal = Math.min.apply(Math, nodesData.map(function (p) {
-        return p["referenced-n-times-local"];
-    }));
-
-    var maximumReferencedLocal = Math.max.apply(Math, nodesData.map(function (p) {
-        return p["referenced-n-times-local"];
-    }));
-
-    var nYears = Math.max.apply(Math, nodesData.map(function (p) {
-        return p["year"];
-    })) + 1;
+    var minimumReferencedGlobal = Math.min.apply(Math, nodesData.map(p => p["referenced-n-times-global"]));
+    var maximumReferencedGlobal = Math.max.apply(Math, nodesData.map(p => p["referenced-n-times-global"]));
+    var minimumReferencedLocal = Math.min.apply(Math, nodesData.map(p => p["referenced-n-times-local"]));
+    var maximumReferencedLocal = Math.max.apply(Math, nodesData.map(p => p["referenced-n-times-local"]));
+    var nYears = Math.max.apply(Math, nodesData.map(p => p["year"])) + 1;
 
     var minimumRadius = 50,
         maximumRadius = 20,
         colorMin = "white",
-        colorMax = "#9C27B0";
-    var maxTitleLength = 20,
+        colorMax = "#9C27B0",
+        maxTitleLength = 20,
         collisionRadius = 100,
         labelFontSizePixels = 20,
-        labelFontSizeString = labelFontSizePixels + "px";
+        labelFontSizeString = labelFontSizePixels + "px",
+        defaultTextOpacity = 0.85,
+        defaultStrokeOpacity = 0.5
+    ;
 
     var radiusScale = d3.scaleLog()
         .domain([minimumReferencedGlobal + 1, maximumReferencedGlobal + 1]) // must not be zero => + 1
@@ -125,9 +114,7 @@
         .domain([minimumReferencedLocal, maximumReferencedLocal])
         .range(["black", colorMax]);
 
-    nodesData.forEach(function (p) {
-        p.radius = radiusScale(p["referenced-n-times-global"] + 1);
-    });
+    nodesData.forEach(p => p.radius = radiusScale(p["referenced-n-times-global"] + 1));
 
     var svg = d3.select("svg"),
         width = +svg.attr("width"),
@@ -136,7 +123,8 @@
 
     var yearHeight = height / nYears;
 
-    var force = d3.forceSimulation()
+    var force = d3
+        .forceSimulation()
         .nodes(nodesData)
         .alpha(0.25)
         .alphaMin(0.05)
@@ -150,14 +138,8 @@
 
     force
         .force("collision_force", d3.forceCollide(collisionRadius).strength(1))
-        .force("link_force", d3.forceLink(linksData)
-            .id(function (d) {
-                return d.key;
-            })
-            .strength(0.1))
-        .force("position_force_Y", d3.forceY(function (d) {
-            return yearHeight * (d.year + 0.5)
-        }).strength(3))
+        .force("link_force", d3.forceLink(linksData).id(d => d.key).strength(0.1))
+        .force("position_force_Y", d3.forceY(d => yearHeight * (d.year + 0.5)).strength(3))
         .force("position_force_X", d3.forceX(width / 2).strength(0.2))
     ;
 
@@ -171,19 +153,19 @@
         .on('mouseover', fadeLink(0.5, 0.1, 0.5, 0.25, true))
         .on('mouseout', fadeLink(1.0, 1.0, 1.0, 1.0, false))
     ;
+
     var visibleLink = link
         .append("line")
         .attr("stroke-width", 4)
         .style("stroke", colorScale(1))
     ;
+
     var hoverLink = link
         .append("line")
         .attr("stroke-width", 48)
         .style("stroke", "transparent")
     ;
 
-    var defaultTextOpacity = 0.85,
-        defaultStrokeOpacity = 0.5;
     var node = svg
         .append("g")
         .attr("class", "nodes")
@@ -194,15 +176,11 @@
         .on('mouseover', fadeNode(0.5, 0.1, 0.5, 0.25, true))
         .on('mouseout', fadeNode(1.0, 1.0, 1.0, 1.0, false))
     ;
+
     node
         .append("circle")
-        .attr("r", function (p) {
-            return p.radius;
-        })
-        .attr("fill", function (d) {
-            return colorScale(d["referenced-n-times-local"]);
-        })
-        .attr("fill-opacity", 1.0)
+        .attr("r", p => p.radius)
+        .attr("fill", d => colorScale(d["referenced-n-times-local"]))
         .attr("stroke", "black")
         .attr("stroke-opacity", defaultStrokeOpacity)
         .style("filter", getFilter)
@@ -211,21 +189,11 @@
     node
         .append("text")
         .attr("dx", 0)
-        .attr("dy", function (d) {
-            return d.radius + labelFontSizePixels + 4;
-        })
+        .attr("dy", d => d.radius + labelFontSizePixels + 4)
         .style("text-anchor", "middle")
         .style("font-size", labelFontSizeString)
         .style("font", "Roboto")
-        .text(function (d) {
-            var text;
-            if (d.title.length > maxTitleLength) {
-                text = d.title.substring(0, maxTitleLength) + "…";
-            } else {
-                text = d.title;
-            }
-            return text;
-        })
+        .text(d => d.title.length > maxTitleLength ? d.title.substring(0, maxTitleLength) + "…" : d.title)
         .style("opacity", defaultTextOpacity)
     ;
 
@@ -237,36 +205,45 @@
         return makeFilter('drop-shadow-' + d["referenced-n-times-local"] + "-selected", true);
     }
 
+    // https://stackoverflow.com/questions/33878292/d3-set-filter-flood-color-based-on-data
     function makeFilter(id, isSelected) {
-        //make a filter if filter id not present
         if (defs.selectAll("#" + id).empty()) {
-            var filter = defs.append('filter')
+            var filter = defs
+                .append('filter')
                 .attr('id', id)
-                .attr('height', '200%');
+                .attr('height', '200%')
+            ;
 
-            filter.append('feGaussianBlur')
+            filter
+                .append('feGaussianBlur')
                 .attr('in', 'SourceAlpha')
                 .attr('stdDeviation', isSelected ? 3 : 1)
-                .attr('result', 'blur');
+                .attr('result', 'blur')
+            ;
 
-            filter.append('feOffset')
+            filter
+                .append('feOffset')
                 .attr('in', 'blur')
-                .attr('result', 'offsetBlur');
+                .attr('result', 'offsetBlur')
+            ;
 
-            filter.append("feFlood")
+            filter
+                .append("feFlood")
                 .attr("in", "offsetBlur")
                 .attr("flood-color", isSelected ? colorScale(100) : shadowColorScale(0))
                 .attr("flood-opacity", "1")
-                .attr("result", "offsetColor");
+                .attr("result", "offsetColor")
+            ;
 
-            filter.append("feComposite")
+            filter
+                .append("feComposite")
                 .attr("in", "offsetColor")
                 .attr("in2", "offsetBlur")
                 .attr("operator", "in")
-                .attr("result", "offsetBlur");
+                .attr("result", "offsetBlur")
+            ;
 
             var feMerge = filter.append('feMerge');
-
             feMerge.append('feMergeNode')
                 .attr('in', 'offsetBlur');
             feMerge.append('feMergeNode')
@@ -296,12 +273,8 @@
                 .select("circle")
                 .transition("fade")
                 .duration(hoverTransitionDuration)
-                .style("stroke-opacity", function (o) {
-                    return isConnected(d, o) ? 1 : strokeOpacity;
-                })
-                .style("fill-opacity", function (o) {
-                    return isConnected(d, o) ? 1 : fillOpacity;
-                })
+                .style("stroke-opacity", o => isConnected(d, o) ? 1 : strokeOpacity)
+                .style("fill-opacity", o => isConnected(d, o) ? 1 : fillOpacity)
                 .style("filter", function (o) {
                     if (isHoverMode) {
                         if (o.key === d.key) {
@@ -318,16 +291,12 @@
                 .select("text")
                 .transition("fade")
                 .duration(hoverTransitionDuration)
-                .style("opacity", function (o) {
-                    return isConnected(d, o) ? 1 : strokeOpacity;
-                })
+                .style("opacity", o => isConnected(d, o) ? 1 : strokeOpacity)
             ;
             link
                 .transition("fade")
                 .duration(hoverTransitionDuration)
-                .style("stroke-opacity", function (l) {
-                    return isPartOfLink(d, l) ? 1 : linkOpacity;
-                })
+                .style("stroke-opacity", l => isPartOfLink(d, l) ? 1 : linkOpacity)
             ;
         };
     }
@@ -338,12 +307,8 @@
                 .select("circle")
                 .transition("fade")
                 .duration(hoverTransitionDuration)
-                .style("stroke-opacity", function (o) {
-                    return isPartOfLink(o, l) ? 1 : strokeOpacity;
-                })
-                .style("fill-opacity", function (o) {
-                    return isPartOfLink(o, l) ? 1 : fillOpacity;
-                })
+                .style("stroke-opacity", o => isPartOfLink(o, l) ? 1 : strokeOpacity)
+                .style("fill-opacity", o => isPartOfLink(o, l) ? 1 : fillOpacity)
                 .style("filter", function (o) {
                     if (isHoverMode) {
                         return isPartOfLink(o, l) ? getFilterSelected(o) : "";
@@ -356,16 +321,13 @@
                 .select("text")
                 .transition("fade")
                 .duration(hoverTransitionDuration)
-                .style("opacity", function (o) {
-                    return isPartOfLink(o, l) ? 1 : strokeOpacity;
-                })
+                .style("opacity", o => isPartOfLink(o, l) ? 1 : strokeOpacity)
             ;
             link
                 .transition("fade")
                 .duration(hoverTransitionDuration)
-                .style("stroke-opacity", function (l2) {
-                    return isPartOfLink(l2.source, l) && isPartOfLink(l2.target, l) ? 1 : linkOpacity;
-                })
+                .style("stroke-opacity",
+                    l2 => isPartOfLink(l2.source, l) && isPartOfLink(l2.target, l) ? 1 : linkOpacity)
             ;
         };
     }
@@ -374,51 +336,29 @@
 
     function tickActions() {
         node
-            .attr("cx", function (d) {
-                return d.x = Math.max(d.radius, Math.min(width - d.radius, d.x));
-            })
-            .attr("cy", function (d) {
-                var min_offset = yearHeight * d.year;
-                var max_offset = yearHeight * (d.year + 1);
-                return d.y = Math.max(d.radius + min_offset, Math.min(max_offset - d.radius, d.y));
-            })
-            .attr("transform", function (d) {
-                return "translate(" + d.x + "," + d.y + ")";
-            })
+            .attr("cx", d => Math.max(d.radius, Math.min(width - d.radius, d.x)))
+            .attr("cy", d => Math.max(d.radius + yearHeight * d.year,
+                Math.min(yearHeight * (d.year + 1) - d.radius, d.y)))
+            .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
         ;
 
         visibleLink
-            .attr("x1", function (d) {
-                return d.source.x;
-            })
-            .attr("y1", function (d) {
-                return d.source.y;
-            })
-            .attr("x2", function (d) {
-                return d.target.x;
-            })
-            .attr("y2", function (d) {
-                return d.target.y;
-            })
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y)
         ;
 
         hoverLink
-            .attr("x1", function (d) {
-                return d.source.x;
-            })
-            .attr("y1", function (d) {
-                return d.source.y;
-            })
-            .attr("x2", function (d) {
-                return d.target.x;
-            })
-            .attr("y2", function (d) {
-                return d.target.y;
-            })
+            .attr("x1", d => d.source.x)
+            .attr("y1", d => d.source.y)
+            .attr("x2", d => d.target.x)
+            .attr("y2", d => d.target.y)
         ;
     }
 
-    var drag_handler = d3.drag()
+    var drag_handler = d3
+        .drag()
         .on("start", drag_start)
         .on("drag", drag_drag)
         .on("end", drag_end);
@@ -426,7 +366,9 @@
     drag_handler(node);
 
     function drag_start(d) {
-        if (!d3.event.active) force.alphaTarget(0.3).restart();
+        if (!d3.event.active) {
+            force.alphaTarget(0.3).restart();
+        }
         d.fx = d.x;
         d.fy = d.y;
     }
@@ -437,7 +379,9 @@
     }
 
     function drag_end(d) {
-        if (!d3.event.active) force.alphaTarget(0);
+        if (!d3.event.active) {
+            force.alphaTarget(0);
+        }
         d.fx = null;
         d.fy = null;
     }
