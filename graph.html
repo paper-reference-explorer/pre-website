@@ -84,12 +84,20 @@
         {"source": "C_another", "target": "F_young"},
     ];
 
+    var minimumReferencedGlobal = Math.min.apply(Math, nodesData.map(function (p) {
+        return p["referenced-n-times-global"];
+    }));
+
     var maximumReferencedGlobal = Math.max.apply(Math, nodesData.map(function (p) {
         return p["referenced-n-times-global"];
     }));
 
-    var minimumReferencedGlobal = Math.min.apply(Math, nodesData.map(function (p) {
-        return p["referenced-n-times-global"];
+    var minimumReferencedLocal = Math.min.apply(Math, nodesData.map(function (p) {
+        return p["referenced-n-times-local"];
+    }));
+
+    var maximumReferencedLocal = Math.max.apply(Math, nodesData.map(function (p) {
+        return p["referenced-n-times-local"];
     }));
 
     var nYears = Math.max.apply(Math, nodesData.map(function (p) {
@@ -97,11 +105,17 @@
     })) + 1;
 
     var minimumRadius = 50,
-        maximumRadius = 20;
+        maximumRadius = 20,
+        colorMin = "white",
+        colorMax = "red";
 
     var radiusScale = d3.scaleLog()
         .domain([minimumReferencedGlobal + 1, maximumReferencedGlobal + 1]) // must not be zero => + 1
         .range([minimumRadius, maximumRadius]);
+
+    var colorScale = d3.scaleLinear()
+        .domain([minimumReferencedLocal, maximumReferencedLocal])
+        .range([colorMin, colorMax]);
 
     nodesData.forEach(function (p) {
         p.radius = radiusScale(p["referenced-n-times-global"] + 1);
@@ -145,7 +159,8 @@
         .enter()
         .append("line")
         .attr("stroke-width", 2)
-        .style("stroke", linkColor);
+        .style("stroke", linkColor)
+    ;
 
     var node = svg.append("g")
         .attr("class", "nodes")
@@ -154,22 +169,13 @@
         .enter()
         .append("circle")
         .attr("r", function (p) {
-            return p.radius
+            return p.radius;
         })
-        .attr("fill", circleColor);
-
-
-    function circleColor(d) {
-        if (d.year === 0) {
-            return "#000";
-        } else if (d.year === 1) {
-            return "#444";
-        } else if (d.year === 2) {
-            return "#888";
-        } else {
-            return "#ccc";
-        }
-    }
+        .attr("fill", function (d) {
+            return colorScale(d["referenced-n-times-local"]);
+        })
+        .attr("stroke", "black")
+    ;
 
     function linkColor(d) {
         if (d.type === "A") {
