@@ -167,7 +167,7 @@
         .data(linksData)
         .enter()
         .append("line")
-        .attr("stroke-width", 2)
+        .attr("stroke-width", 4)
         .style("stroke", function (l) {
             return colorScale(1);
         })
@@ -181,16 +181,8 @@
         .data(nodesData)
         .enter()
         .append("g")
-        .on('mouseover', function (d) {
-            d3.select(this).select("circle").style("filter", getFilterSelected);
-            d3.select(this).select("circle").attr("stroke-opacity", 1.0);
-            d3.select(this).select("text").style("opacity", 1.0);
-        })
-        .on('mouseout', function (d) {
-            d3.select(this).select("circle").style("filter", getFilter);
-            d3.select(this).select("circle").attr("stroke-opacity", defaultStrokeOpacity);
-            d3.select(this).select("text").style("opacity", defaultTextOpacity);
-        })
+        .on('mouseover', fade(0.5, 0.1, 0.5, 0.25, true))
+        .on('mouseout', fade(1.0, 1.0, 1.0, 1.0, false))
     ;
     node
         .append("circle")
@@ -228,14 +220,14 @@
     ;
 
     function getFilter(d) {
-        return makeFiter('drop-shadow-' + d["referenced-n-times-local"], false);
+        return makeFilter('drop-shadow-' + d["referenced-n-times-local"], false);
     }
 
     function getFilterSelected(d) {
-        return makeFiter('drop-shadow-' + d["referenced-n-times-local"] + "-selected", true);
+        return makeFilter('drop-shadow-' + d["referenced-n-times-local"] + "-selected", true);
     }
 
-    function makeFiter(id, isSelected) {
+    function makeFilter(id, isSelected) {
         //make a filter if filter id not present
         if (defs.selectAll("#" + id).empty()) {
             var filter = defs.append('filter')
@@ -271,6 +263,49 @@
                 .attr('in', 'SourceGraphic');
         }
         return 'url(#' + id + ")"
+    }
+
+    function isConnected(a, b) {
+        return linksData.some(function (l) {
+            return (l.source.key === a.key && l.target.key === b.key)
+                || (l.source.key === b.key && l.target.key === a.key)
+                || a.key === b.key;
+        });
+    }
+
+    // http://bl.ocks.org/martinjc/396926c15afa2ab0127322a01d97b5f4
+    function fade(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
+        return function (d) {
+            node
+                .select("circle")
+                .style("stroke-opacity", function (o) {
+                    return isConnected(d, o) ? 1 : strokeOpacity;
+                })
+                .style("fill-opacity", function (o) {
+                    return isConnected(d, o) ? 1 : fillOpacity;
+                })
+                .style("filter", function (o) {
+                    if (isHoverMode) {
+                        if (o.key === d.key) {
+                            return getFilterSelected(o)
+                        } else {
+                            return isConnected(d, o) ? getFilter(o) : "";
+                        }
+                    } else {
+                        return getFilter(o);
+                    }
+                })
+            ;
+            node
+                .select("text")
+                .style("opacity", function (o) {
+                    return isConnected(d, o) ? 1 : strokeOpacity;
+                })
+            ;
+            link.style("stroke-opacity", function (o) {
+                return o.source === d || o.target === d ? 1 : linkOpacity;
+            });
+        };
     }
 
     force.on("tick", tickActions);
