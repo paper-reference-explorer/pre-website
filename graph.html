@@ -58,6 +58,12 @@
         .nodes(nodes_data)
         .alpha(0.25)
         .alphaMin(0.01)
+        .on('end', function() {
+            force.force("collision_force", null);
+            force.force("position_force_Y", null);
+            force.force("position_force_X", null);
+            force.force("link_force", null);
+        })
     ;
 
     force
