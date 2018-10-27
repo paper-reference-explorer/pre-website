@@ -206,11 +206,11 @@
     ;
 
     function getFilter(d) {
-        return makeFilter('drop-shadow-' + d["referenced-n-times-local"], false);
+        return makeFilter("drop-shadow-" + parseInt(d["referenced-n-times-local"]), false);
     }
 
     function getFilterSelected(d) {
-        return makeFilter('drop-shadow-' + d["referenced-n-times-local"] + "-selected", true);
+        return makeFilter("drop-shadow-" + parseInt(d["referenced-n-times-local"]) + "-selected", true);
     }
 
     // https://stackoverflow.com/questions/33878292/d3-set-filter-flood-color-based-on-data
