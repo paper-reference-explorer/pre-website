@@ -159,7 +159,9 @@
         .enter()
         .append("line")
         .attr("stroke-width", 2)
-        .style("stroke", linkColor)
+        .style("stroke", function (l) {
+            return colorScale(1);
+        })
     ;
 
     var node = svg.append("g")
@@ -176,14 +178,6 @@
         })
         .attr("stroke", "black")
     ;
-
-    function linkColor(d) {
-        if (d.type === "A") {
-            return "green";
-        } else {
-            return "red";
-        }
-    }
 
     force.on("tick", tickActions);
 
