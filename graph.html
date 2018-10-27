@@ -265,10 +265,15 @@
     }
 
     var hoverTransitionDuration = 250;
+    var isDragging = false;
 
     // http://bl.ocks.org/martinjc/396926c15afa2ab0127322a01d97b5f4
     function fadeNode(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
         return function (d) {
+            if (isDragging) {
+                return;
+            }
+
             node
                 .select("circle")
                 .transition("fade")
@@ -303,6 +308,10 @@
 
     function fadeLink(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
         return function (l) {
+            if (isDragging) {
+                return;
+            }
+
             node
                 .select("circle")
                 .transition("fade")
@@ -369,6 +378,7 @@
         if (!d3.event.active) {
             force.alphaTarget(0.3).restart();
         }
+        isDragging = true;
         d.fx = d.x;
         d.fy = d.y;
     }
@@ -382,6 +392,7 @@
         if (!d3.event.active) {
             force.alphaTarget(0);
         }
+        isDragging = false;
         d.fx = null;
         d.fy = null;
     }
