@@ -173,12 +173,24 @@
         })
     ;
 
+    var defaultTextOpacity = 0.85,
+        defaultStrokeOpacity = 0.5;
     var node = svg.append("g")
         .attr("class", "nodes")
         .selectAll("circle")
         .data(nodesData)
         .enter()
         .append("g")
+        .on('mouseover', function (d) {
+            d3.select(this).select("circle").style("filter", getFilterSelected);
+            d3.select(this).select("circle").attr("stroke-opacity", 1.0);
+            d3.select(this).select("text").style("opacity", 1.0);
+        })
+        .on('mouseout', function (d) {
+            d3.select(this).select("circle").style("filter", getFilter);
+            d3.select(this).select("circle").attr("stroke-opacity", defaultStrokeOpacity);
+            d3.select(this).select("text").style("opacity", defaultTextOpacity);
+        })
     ;
     node
         .append("circle")
@@ -188,15 +200,10 @@
         .attr("fill", function (d) {
             return colorScale(d["referenced-n-times-local"]);
         })
+        .attr("fill-opacity", 1.0)
         .attr("stroke", "black")
+        .attr("stroke-opacity", defaultStrokeOpacity)
         .style("filter", getFilter)
-        .on('mouseover', function (d) {
-            // d3.select(this).style("opacity", 0.2);
-            d3.select(this).style("filter", getFilterSelected);
-        })
-        .on('mouseout', function (d) {
-            d3.select(this).style("filter", getFilter);
-        })
     ;
 
     node
@@ -217,6 +224,7 @@
             }
             return text;
         })
+        .style("opacity", defaultTextOpacity)
     ;
 
     function getFilter(d) {
