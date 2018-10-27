@@ -383,20 +383,42 @@
         ;
 
         function tickLink(l) {
+            function getPathLength(d) {
+                var diffX = d.target.x - d.source.x,
+                    diffY = d.target.y - d.source.y;
+                return [diffX, diffY, Math.sqrt((diffX * diffX) + (diffY * diffY))];
+            }
+
             l
-                .attr("x1", d => d.source.x)
-                .attr("y1", d => d.source.y)
+                .attr("x1", function (d) {
+                    var temp = getPathLength(d);
+                    var diffX = temp[0],
+                        diffY = temp[1],
+                        pathLength = temp[2];
+                    var offsetX = diffX * d.source.radius / pathLength;
+                    return d.source.x + offsetX;
+                })
+                .attr("y1", function (d) {
+                    var temp = getPathLength(d);
+                    var diffX = temp[0],
+                        diffY = temp[1],
+                        pathLength = temp[2];
+                    var offsetY = diffY * d.source.radius / pathLength;
+                    return d.source.y + offsetY;
+                })
                 .attr("x2", function (d) {
-                    var diffY = d.target.y - d.source.y,
-                        diffX = d.target.x - d.source.x;
-                    var pathLength = Math.sqrt((diffX * diffX) + (diffY * diffY));
+                    var temp = getPathLength(d);
+                    var diffX = temp[0],
+                        diffY = temp[1],
+                        pathLength = temp[2];
                     var offsetX = diffX * (d.target.radius + linkOffsetForArrow) / pathLength;
                     return d.target.x - offsetX;
                 })
                 .attr("y2", function (d) {
-                    var diffY = d.target.y - d.source.y,
-                        diffX = d.target.x - d.source.x;
-                    var pathLength = Math.sqrt((diffX * diffX) + (diffY * diffY));
+                    var temp = getPathLength(d);
+                    var diffX = temp[0],
+                        diffY = temp[1],
+                        pathLength = temp[2];
                     var offsetY = diffY * (d.target.radius + linkOffsetForArrow) / pathLength;
                     return d.target.y - offsetY;
                 })
