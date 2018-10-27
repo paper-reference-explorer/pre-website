@@ -12,6 +12,12 @@
 <body>
 <svg width="800" height="800"></svg>
 <script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="https://d3js.org/d3-array.v1.min.js"></script>
+<script src="https://d3js.org/d3-collection.v1.min.js"></script>
+<script src="https://d3js.org/d3-color.v1.min.js"></script>
+<script src="https://d3js.org/d3-format.v1.min.js"></script>
+<script src="https://d3js.org/d3-interpolate.v1.min.js"></script>
+<script src="https://d3js.org/d3-scale.v2.min.js"></script>
 
 <script>
     var nodesData = [
@@ -78,16 +84,28 @@
         {"source": "C_another", "target": "F_young"},
     ];
 
+    var maximumReferencedGlobal = Math.max.apply(Math, nodesData.map(function (p) {
+        return p["referenced-n-times-global"];
+    }));
+
+    var minimumReferencedGlobal = Math.min.apply(Math, nodesData.map(function (p) {
+        return p["referenced-n-times-global"];
+    }));
+
+    var nYears = Math.max.apply(Math, nodesData.map(function (p) {
+        return p["year"];
+    })) + 1;
+
+    var minimumRadius = 50,
+        maximumRadius = 20;
+
+    var radiusScale = d3.scaleLog()
+        .domain([minimumReferencedGlobal + 1, maximumReferencedGlobal + 1]) // must not be zero => + 1
+        .range([minimumRadius, maximumRadius]);
+
     nodesData.forEach(function (p) {
-        p.radius = 15;
+        p.radius = radiusScale(p["referenced-n-times-global"] + 1);
     });
-
-    var nYears = 3,
-        maximumReferencedGlobal = 412,
-        maximumReferencedLocal = 2;
-
-    var minimumRadius = 5,
-        maximumRadius = 15;
 
     var svg = d3.select("svg"),
         width = +svg.attr("width"),
@@ -136,7 +154,7 @@
         .enter()
         .append("circle")
         .attr("r", function (p) {
-            return logslider(p["referenced-n-times-global"], maximumReferencedGlobal)
+            return p.radius
         })
         .attr("fill", circleColor);
 
@@ -213,22 +231,6 @@
         if (!d3.event.active) force.alphaTarget(0);
         d.fx = null;
         d.fy = null;
-    }
-
-
-    // https://stackoverflow.com/questions/846221/logarithmic-slider
-    function logslider(position, nElements) {
-        // position will be between 0 and 100
-        var minp = 0;
-        var maxp = nElements;
-
-        var minv = Math.log(minimumRadius);
-        var maxv = Math.log(maximumRadius);
-
-        // calculate adjustment factor
-        var scale = (maxv - minv) / (maxp - minp);
-
-        return Math.exp(minv + scale * (position - minp));
     }
 </script>
 </body>
