@@ -15,34 +15,69 @@
 
 <script>
     var nodes_data = [
-        {"name": "Lillian", "sex": "F", "year": 3},
-        {"name": "Gordon", "sex": "M", "year": 3},
-        {"name": "Sylvester", "sex": "M", "year": 3},
-        {"name": "Mary", "sex": "F", "year": 2},
-        {"name": "Helen", "sex": "F", "year": 1},
-        {"name": "Jamie", "sex": "M", "year": 1},
-        {"name": "Jessie", "sex": "F", "year": 1},
-        {"name": "Ashton", "sex": "M", "year": 0},
-        {"name": "Duncan", "sex": "M", "year": 0},
-        {"name": "Evette", "sex": "F", "year": 0},
-        {"name": "Mauer", "sex": "M", "year": 0}
+        {
+            "key": "A_my",
+            "authors": "A et al.",
+            "title": "My first paper",
+            "date-created": "2018-09-01",
+            "referenced-n-times-global": 0,
+            "referenced-n-times-local": 0,
+            "year": 2
+        },
+        {
+            "key": "B_friendly",
+            "authors": "B et al.",
+            "title": "Friendly paper",
+            "date-created": "2018-04-23",
+            "referenced-n-times-global": 5,
+            "referenced-n-times-local": 0,
+            "year": 2
+        },
+        {
+            "key": "F_young",
+            "authors": "F et al.",
+            "title": "Young paper",
+            "date-created": "2016-02-16",
+            "referenced-n-times-global": 37,
+            "referenced-n-times-local": 1,
+            "year": 1
+        },
+        {
+            "key": "C_another",
+            "authors": "C et al.",
+            "title": "Another friendly paper",
+            "date-created": "2016-12-05",
+            "referenced-n-times-global": 8,
+            "referenced-n-times-local": 0,
+            "year": 1
+        },
+        {
+            "key": "D_old",
+            "authors": "D et al.",
+            "title": "Old paper",
+            "date-created": "2013-04-01",
+            "referenced-n-times-global": 236,
+            "referenced-n-times-local": 2,
+            "year": 0
+        },
+        {
+            "key": "E_older",
+            "authors": "E et al.",
+            "title": "Older paper",
+            "date-created": "2012-08-13",
+            "referenced-n-times-global": 412,
+            "referenced-n-times-local": 1,
+            "year": 0
+        }
     ];
 
-    //type: A for Ally, E for Enemy
+    var n_years = 3;
+
     var links_data = [
-        {"source": "Lillian", "target": "Mary", "type": "A"},
-        {"source": "Lillian", "target": "Jessie", "type": "A"},
-        {"source": "Lillian", "target": "Duncan", "type": "A"},
-        {"source": "Lillian", "target": "Ashton", "type": "A"},
-        {"source": "Gordon", "target": "Mary", "type": "A"},
-        {"source": "Gordon", "target": "Mauer", "type": "A"},
-        {"source": "Sylvester", "target": "Jessie", "type": "A"},
-        {"source": "Sylvester", "target": "Evette", "type": "A"},
-        {"source": "Mary", "target": "Jamie", "type": "A"},
-        {"source": "Mary", "target": "Evette", "type": "A"},
-        {"source": "Helen", "target": "Ashton", "type": "A"},
-        {"source": "Sylvester", "target": "Evette", "type": "A"},
-        {"source": "Jamie", "target": "Mauer", "type": "A"}
+        {"source": "A_my", "target": "D_old"},
+        {"source": "B_friendly", "target": "D_old"},
+        {"source": "B_friendly", "target": "E_older"},
+        {"source": "C_another", "target": "F_young"},
     ];
 
     var radius = 15;
@@ -50,6 +85,8 @@
     var svg = d3.select("svg"),
         width = +svg.attr("width"),
         height = +svg.attr("height");
+
+    var year_height = height / n_years;
 
     var force = d3.forceSimulation()
         .nodes(nodes_data)
@@ -67,11 +104,11 @@
         .force("collision_force", d3.forceCollide(100).strength(1))
         .force("link_force", d3.forceLink(links_data)
             .id(function (d) {
-                return d.name;
+                return d.key;
             })
             .strength(0.1))
         .force("position_force_Y", d3.forceY(function (d) {
-            return height / 4.0 * (d.year + 0.5)
+            return year_height  * (d.year + 0.5)
         }).strength(3))
         .force("position_force_X", d3.forceX(width / 2).strength(0.2))
     ;
@@ -123,8 +160,8 @@
                 return d.x = Math.max(radius, Math.min(width - radius, d.x));
             })
             .attr("cy", function (d) {
-                var min_offset = height / 4.0 * d.year;
-                var max_offset = height / 4.0 * (d.year + 1);
+                var min_offset = year_height * d.year;
+                var max_offset = year_height * (d.year + 1);
                 return d.y = Math.max(radius + min_offset, Math.min(max_offset - radius, d.y));
             })
         ;
