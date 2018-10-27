@@ -338,7 +338,7 @@
         node
             .attr("cx", d => d.x = Math.max(d.radius, Math.min(width - d.radius, d.x)))
             .attr("cy", d => d.y = Math.max(d.radius + yearHeight * d.year,
-                Math.min(yearHeight * (d.year + 1) - d.radius, d.y)))
+                Math.min(yearHeight * (d.year + 1) - d.radius - labelFontSizePixels - 12, d.y)))
             .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
         ;
 
