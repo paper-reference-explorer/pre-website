@@ -117,6 +117,10 @@
         .domain([minimumReferencedLocal, maximumReferencedLocal])
         .range([colorMin, colorMax]);
 
+    var shadowColorScale = d3.scaleLinear()
+        .domain([minimumReferencedLocal, maximumReferencedLocal])
+        .range(["black", colorMax]);
+
     nodesData.forEach(function (p) {
         p.radius = radiusScale(p["referenced-n-times-global"] + 1);
     });
@@ -124,6 +128,7 @@
     var svg = d3.select("svg"),
         width = +svg.attr("width"),
         height = +svg.attr("height");
+    var defs = svg.append('defs');
 
     var yearHeight = height / nYears;
 
@@ -177,21 +182,61 @@
             return colorScale(d["referenced-n-times-local"]);
         })
         .attr("stroke", "black")
-        .style("filter", "url(#glow)")
+        .style("filter", getFilter)
+        .on('mouseover', function (d) {
+            // d3.select(this).style("opacity", 0.2);
+            d3.select(this).style("filter", getFilterSelected);
+        })
+        .on('mouseout', function (d) {
+            d3.select(this).style("filter", getFilter);
+        })
     ;
 
-    // https://www.visualcinnamon.com/2016/06/glow-filter-d3-visualization.html
-    var defs = svg.append("defs");
-    var filter = defs.append("filter")
-        .attr("id", "glow");
-    filter.append("feGaussianBlur")
-        .attr("stdDeviation", "2")
-        .attr("result", "coloredBlur");
-    var feMerge = filter.append("feMerge");
-    feMerge.append("feMergeNode")
-        .attr("in", "coloredBlur");
-    feMerge.append("feMergeNode")
-        .attr("in", "SourceGraphic");
+    function getFilter(d) {
+        return makeFiter('drop-shadow-' + d["referenced-n-times-local"], false);
+    }
+
+    function getFilterSelected(d) {
+        return makeFiter('drop-shadow-' + d["referenced-n-times-local"] + "-selected", true);
+    }
+
+    function makeFiter(id, isSelected) {
+        //make a filter if filter id not present
+        if (defs.selectAll("#" + id).empty()) {
+            var filter = defs.append('filter')
+                .attr('id', id)
+                .attr('height', '200%');
+
+            filter.append('feGaussianBlur')
+                .attr('in', 'SourceAlpha')
+                .attr('stdDeviation', isSelected ? 3 : 1)
+                .attr('result', 'blur');
+
+            filter.append('feOffset')
+                .attr('in', 'blur')
+                .attr('result', 'offsetBlur');
+
+            filter.append("feFlood")
+                .attr("in", "offsetBlur")
+                .attr("flood-color", isSelected ? colorScale(100) : shadowColorScale(0))
+                .attr("flood-opacity", "1")
+                .attr("result", "offsetColor");
+
+            filter.append("feComposite")
+                .attr("in", "offsetColor")
+                .attr("in2", "offsetBlur")
+                .attr("operator", "in")
+                .attr("result", "offsetBlur");
+
+            var feMerge = filter.append('feMerge');
+
+            feMerge.append('feMergeNode')
+                .attr('in', 'offsetBlur');
+            feMerge.append('feMergeNode')
+                .attr('in', 'SourceGraphic');
+        }
+        return 'url(#' + id + ")"
+    }
 
     force.on("tick", tickActions);
 
