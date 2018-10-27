@@ -109,7 +109,9 @@
         colorMin = "white",
         colorMax = "#9C27B0";
     var maxTitleLength = 20,
-        collisionRadius = 100;
+        collisionRadius = 100,
+        labelFontSizePixels = 20,
+        labelFontSizeString = labelFontSizePixels + "px";
 
     var radiusScale = d3.scaleLog()
         .domain([minimumReferencedGlobal + 1, maximumReferencedGlobal + 1]) // must not be zero => + 1
@@ -200,7 +202,12 @@
     node
         .append("text")
         .attr("dx", 0)
-        .attr("dy", ".35em")
+        .attr("dy", function (d) {
+            return d.radius + labelFontSizePixels + 4;
+        })
+        .style("text-anchor", "middle")
+        .style("font-size", labelFontSizeString)
+        .style("font", "Roboto")
         .text(function (d) {
             var text;
             if (d.title.length > maxTitleLength) {
