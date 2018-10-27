@@ -187,6 +187,13 @@
     ;
 
     node
+        .append("circle")
+        .attr("r", 150)
+        .attr("fill-opacity", 0)
+        .attr("stroke-opacity", 0)
+    ;
+
+    node
         .append("text")
         .attr("dx", 0)
         .attr("dy", d => d.radius + labelFontSizePixels + 4)
