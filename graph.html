@@ -55,7 +55,7 @@
         .nodes(nodes_data)
         .alpha(0.25)
         .alphaMin(0.01)
-        .on('end', function() {
+        .on('end', function () {
             force.force("collision_force", null);
             force.force("position_force_Y", null);
             force.force("position_force_X", null);
@@ -123,8 +123,8 @@
                 return d.x = Math.max(radius, Math.min(width - radius, d.x));
             })
             .attr("cy", function (d) {
-                min_offset = height / 4.0 * d.year;
-                max_offset = height / 4.0 * (d.year + 1);
+                var min_offset = height / 4.0 * d.year;
+                var max_offset = height / 4.0 * (d.year + 1);
                 return d.y = Math.max(radius + min_offset, Math.min(max_offset - radius, d.y));
             })
         ;
