@@ -177,7 +177,21 @@
             return colorScale(d["referenced-n-times-local"]);
         })
         .attr("stroke", "black")
+        .style("filter", "url(#glow)")
     ;
+
+    // https://www.visualcinnamon.com/2016/06/glow-filter-d3-visualization.html
+    var defs = svg.append("defs");
+    var filter = defs.append("filter")
+        .attr("id", "glow");
+    filter.append("feGaussianBlur")
+        .attr("stdDeviation", "2")
+        .attr("result", "coloredBlur");
+    var feMerge = filter.append("feMerge");
+    feMerge.append("feMergeNode")
+        .attr("in", "coloredBlur");
+    feMerge.append("feMergeNode")
+        .attr("in", "SourceGraphic");
 
     force.on("tick", tickActions);
 
