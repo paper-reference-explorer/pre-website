@@ -159,6 +159,7 @@
         .append("line")
         .attr("stroke-width", 4)
         .style("stroke", colorScale(1))
+        .style("marker-end", getArrowSelected)
     ;
 
     var hoverLink = link
@@ -166,6 +167,28 @@
         .attr("stroke-width", 48)
         .style("stroke", "transparent")
     ;
+
+    function getArrowSelected(l) {
+        return makeArrow("end-arrow-" + parseInt(l.target.radius) + "-selected", l.target.radius, true);
+    }
+
+    function makeArrow(id, radius, isSelected) {
+        if (defs.selectAll("#" + id).empty()) {
+            defs
+                .append("marker")
+                .attr("id", id)
+                .attr("viewBox", "0 -5 10 10")
+                .attr("refX", radius + 6)
+                .attr("markerWidth", 3)
+                .attr("markerHeight", 3)
+                .attr("orient", "auto")
+                .append("path")
+                .attr("d", "M0,-5L10,0L0,5")
+                .attr("fill", colorScale(1))
+                .attr("opacity", isSelected ? 1.0 : 0.25)
+        }
+        return "url(#" + id + ")"
+    }
 
     var node = svg
         .append("g")
@@ -307,7 +330,7 @@
             link
                 .transition("fade")
                 .duration(hoverTransitionDuration)
-                .style("stroke-opacity", l => isPartOfLink(d, l) ? 1 : linkOpacity)
+                .style("opacity", l => isPartOfLink(d, l) ? 1 : linkOpacity)
             ;
         };
     }
@@ -341,8 +364,7 @@
             link
                 .transition("fade")
                 .duration(hoverTransitionDuration)
-                .style("stroke-opacity",
-                    l2 => isPartOfLink(l2.source, l) && isPartOfLink(l2.target, l) ? 1 : linkOpacity)
+                .style("opacity", l2 => isPartOfLink(l2.source, l) && isPartOfLink(l2.target, l) ? 1 : linkOpacity)
             ;
         };
     }
