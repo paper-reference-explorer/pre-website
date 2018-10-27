@@ -279,11 +279,15 @@
         return n.key === l.source.key || n.key === l.target.key;
     }
 
+    var hoverTransitionDuration = 250;
+
     // http://bl.ocks.org/martinjc/396926c15afa2ab0127322a01d97b5f4
     function fadeNode(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
         return function (d) {
             node
                 .select("circle")
+                .transition("fade")
+                .duration(hoverTransitionDuration)
                 .style("stroke-opacity", function (o) {
                     return isConnected(d, o) ? 1 : strokeOpacity;
                 })
@@ -304,13 +308,18 @@
             ;
             node
                 .select("text")
+                .transition("fade")
+                .duration(hoverTransitionDuration)
                 .style("opacity", function (o) {
                     return isConnected(d, o) ? 1 : strokeOpacity;
                 })
             ;
-            link.style("stroke-opacity", function (l) {
-                return isPartOfLink(d, l) ? 1 : linkOpacity;
-            });
+            link
+                .transition("fade")
+                .duration(hoverTransitionDuration)
+                .style("stroke-opacity", function (l) {
+                    return isPartOfLink(d, l) ? 1 : linkOpacity;
+                });
         };
     }
 
@@ -318,6 +327,8 @@
         return function (l) {
             node
                 .select("circle")
+                .transition("fade")
+                .duration(hoverTransitionDuration)
                 .style("stroke-opacity", function (o) {
                     return isPartOfLink(o, l) ? 1 : strokeOpacity;
                 })
@@ -326,11 +337,7 @@
                 })
                 .style("filter", function (o) {
                     if (isHoverMode) {
-                        if (isPartOfLink(o, l)) {
-                            return getFilterSelected(o)
-                        } else {
-                            return ""
-                        }
+                        return isPartOfLink(o, l) ? getFilterSelected(o) : "";
                     } else {
                         return getFilter(o);
                     }
@@ -338,13 +345,18 @@
             ;
             node
                 .select("text")
+                .transition("fade")
+                .duration(hoverTransitionDuration)
                 .style("opacity", function (o) {
                     return isPartOfLink(o, l) ? 1 : strokeOpacity;
                 })
             ;
-            link.style("stroke-opacity", function (l2) {
-                return isPartOfLink(l2.source, l) && isPartOfLink(l2.target, l) ? 1 : linkOpacity;
-            });
+            link
+                .transition("fade")
+                .duration(hoverTransitionDuration)
+                .style("stroke-opacity", function (l2) {
+                    return isPartOfLink(l2.source, l) && isPartOfLink(l2.target, l) ? 1 : linkOpacity;
+                });
         };
     }
 
