@@ -53,16 +53,25 @@
                     justify-center
                     column
                 >
-                    <p class="font-weight-light display-1 text-xs-center">Search for some papers to get started</p>
-
-                    <p class="font-weight-light title">or</p>
-
-                    <v-btn
-                        color="primary"
-                        @click="$store.dispatch('loadExample')"
+                    <v-img
+                        src="assets/images/empty_state.png"
+                        contain
+                        class="empty-state"
+                    ></v-img>
+                    <div
+                        class="image-foreground text-xs-center"
                     >
-                        view example
-                    </v-btn>
+                        <p class="font-weight-light display-1 text-xs-center">Search for some papers to get started</p>
+
+                        <p class="font-weight-light title">or</p>
+
+                        <v-btn
+                            color="primary"
+                            @click="$store.dispatch('loadExample')"
+                        >
+                            view example
+                        </v-btn>
+                    </div>
                 </v-layout>
             </v-container>
 
@@ -127,5 +136,16 @@
 
     .information {
         padding: 0 20px;
+    }
+
+    .empty-state {
+        position: absolute !important;
+        margin-bottom: 325px;
+        width: 350px !important;
+        opacity: 0.25;
+    }
+
+    .image-foreground {
+        z-index: 1;
     }
 </style>
