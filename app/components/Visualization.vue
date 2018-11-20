@@ -126,6 +126,12 @@
             }
         },
         methods: {
+            forceEnd: function () {
+                this.force.force("collision_force", null);
+                this.force.force("position_force_Y", null);
+                this.force.force("position_force_X", null);
+                this.force.force("link_force", null);
+            },
             getFilter: function (d) {
                 return this.makeFilter("drop-shadow-" + parseInt(d["referenced-n-times-local"]), false);
             },
@@ -196,6 +202,16 @@
                 }
                 return "url(#" + id + ")"
             },
+            isConnected: function (a, b) {
+                return this.linksData.some(function (l) {
+                    return a.key === b.key
+                        || (l.source.key === a.key && l.target.key === b.key)
+                        || (l.source.key === b.key && l.target.key === a.key);
+                });
+            },
+            isPartOfLink: function (n, l) {
+                return n.key === l.source.key || n.key === l.target.key;
+            },
             dragStart: function (d) {
                 if (!d3.event.active) {
                     this.force.alphaTarget(0.3).restart();
@@ -244,17 +260,8 @@
                         .nodes(this.nodesData)
                         .alpha(0.25)
                         .alphaMin(0.05)
-                        .on("end", forceEnd)
+                        .on("end", this.forceEnd)
                     ;
-
-                    var force = this.force;
-
-                    function forceEnd() {
-                        force.force("collision_force", null);
-                        force.force("position_force_Y", null);
-                        force.force("position_force_X", null);
-                        force.force("link_force", null);
-                    }
 
                     this.force
                         .force("collision_force", d3.forceCollide(this.collisionRadius).strength(1))
@@ -288,7 +295,6 @@
                     ;
 
                     var arrowSize = this.arrowSize;
-                    var that = this;
 
                     var node = this.svg
                         .append("g")
@@ -299,6 +305,10 @@
                         .append("g")
                         .on("mouseover", fadeNode(0.5, 0.1, 0.5, 0.25, true))
                         .on("mouseout", fadeNode(1.0, 1.0, 1.0, 1.0, false))
+                        .call(d3.drag()
+                            .on("start", this.dragStart)
+                            .on("drag", this.dragDrag)
+                            .on("end", this.dragEnd))
                     ;
 
                     node
@@ -328,25 +338,13 @@
                         .style("opacity", this.defaultTextOpacity)
                     ;
 
-                    var linksData = this.linksData;
-
-                    function isConnected(a, b) {
-                        return linksData.some(function (l) {
-                            return a.key === b.key
-                                || (l.source.key === a.key && l.target.key === b.key)
-                                || (l.source.key === b.key && l.target.key === a.key);
-                        });
-                    }
-
-                    function isPartOfLink(n, l) {
-                        return n.key === l.source.key || n.key === l.target.key;
-                    }
-
                     var hoverTransitionDuration = 250;
                     var isDragging = isDragging;
 
                     var getFilterSelected = this.getFilterSelected;
                     var getFilter = this.getFilter;
+                    var isConnected = this.isConnected;
+                    var isPartOfLink = this.isPartOfLink;
 
                     function fadeNode(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
                         // http://bl.ocks.org/martinjc/396926c15afa2ab0127322a01d97b5f4
@@ -483,15 +481,6 @@
                         tickLink(visibleLink);
                         tickLink(hoverLink);
                     }
-
-                    var drag_handler = d3
-                        .drag()
-                        .on("start", this.dragStart)
-                        .on("drag", this.dragDrag)
-                        .on("end", this.dragEnd);
-
-                    drag_handler(node);
-
                 },
                 {
                     deep: true
