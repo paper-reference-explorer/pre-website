@@ -14,8 +14,8 @@
             svg: null,
             width: 0,
             height: 0,
-            minimumRadius: 50,
-            maximumRadius: 20,
+            minimumRadius: 20,
+            maximumRadius: 50,
             padding: 8,
             colorMin: "white",
             colorMax: "#9C27B0",
@@ -28,6 +28,8 @@
             arrowSize: 4,
             hoverTransitionDuration: 250,
             isDragging: false,
+            colorScale: null,
+            shadowColorScale: null,
             nodesData: [
                 {
                     "key": "A_my",
@@ -94,12 +96,85 @@
         computed: {
             viewBox() {
                 return "0 0 " + this.height + " " + this.width;
+            },
+            defs() {
+                return this.svg.append("defs");
             }
         },
-        methods: {},
+        methods: {
+            getFilter: function (d) {
+                return this.makeFilter("drop-shadow-" + parseInt(d["referenced-n-times-local"]), false);
+            },
+            getFilterSelected: function (d) {
+                return this.makeFilter("drop-shadow-" + parseInt(d["referenced-n-times-local"]) + "-selected", true);
+            },
+            makeFilter: function (id, isSelected) {
+                // https://stackoverflow.com/questions/33878292/d3-set-filter-flood-color-based-on-data
+                if (this.defs.selectAll("#" + id).empty()) {
+                    var filter = this.defs
+                        .append("filter")
+                        .attr("id", id)
+                        .attr("height", "200%")
+                    ;
+
+                    filter
+                        .append("feGaussianBlur")
+                        .attr("in", "SourceAlpha")
+                        .attr("stdDeviation", isSelected ? 3 : 1)
+                        .attr("result", "blur")
+                    ;
+
+                    filter
+                        .append("feOffset")
+                        .attr("in", "blur")
+                        .attr("result", "offsetBlur")
+                    ;
+
+                    filter
+                        .append("feFlood")
+                        .attr("in", "offsetBlur")
+                        .attr("flood-color", isSelected ? this.colorScale(100) : this.shadowColorScale(0))
+                        .attr("flood-opacity", "1")
+                        .attr("result", "offsetColor")
+                    ;
+
+                    filter
+                        .append("feComposite")
+                        .attr("in", "offsetColor")
+                        .attr("in2", "offsetBlur")
+                        .attr("operator", "in")
+                        .attr("result", "offsetBlur")
+                    ;
+
+                    var feMerge = filter.append("feMerge");
+                    feMerge.append("feMergeNode").attr("in", "offsetBlur");
+                    feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+                }
+                return "url(#" + id + ")"
+            },
+            getArrowSelected: function (l) {
+                return this.makeArrow("end-arrow-" + parseInt(l.target.radius) + "-selected", l.target.radius, true);
+            },
+            makeArrow: function (id, radius, isSelected) {
+                if (this.defs.selectAll("#" + id).empty()) {
+                    this.defs
+                        .append("marker")
+                        .attr("id", id)
+                        .attr("viewBox", "0 -5 10 10")
+                        .attr("refX", 0)
+                        .attr("markerWidth", this.arrowSize)
+                        .attr("markerHeight", this.arrowSize)
+                        .attr("orient", "auto")
+                        .append("path")
+                        .attr("d", "M0,-5L10,0L0,5")
+                        .attr("fill", this.colorScale(1))
+                        .attr("opacity", isSelected ? 1.0 : 0.25)
+                }
+                return "url(#" + id + ")"
+            }
+        },
         mounted() {
             this.svg = d3.select("svg");
-            var defs = this.svg.append("defs");
 
             this.$store.watch(
                 (state) => {
@@ -127,11 +202,11 @@
                         .domain([minimumReferencedGlobal + 1, maximumReferencedGlobal + 1]) // must not be zero => + 1
                         .range([this.minimumRadius, this.maximumRadius]);
 
-                    var colorScale = d3.scaleLinear()
+                    this.colorScale = d3.scaleLinear()
                         .domain([minimumReferencedLocal, maximumReferencedLocal])
                         .range([this.colorMin, this.colorMax]);
 
-                    var shadowColorScale = d3.scaleLinear()
+                    this.shadowColorScale = d3.scaleLinear()
                         .domain([minimumReferencedLocal, maximumReferencedLocal])
                         .range(["black", this.colorMax]);
 
@@ -173,8 +248,8 @@
                     var visibleLink = link
                         .append("line")
                         .attr("stroke-width", 4)
-                        .style("stroke", colorScale(1))
-                        .style("marker-end", getArrowSelected)
+                        .style("stroke", this.colorScale(1))
+                        .style("marker-end", this.getArrowSelected)
                     ;
 
                     var hoverLink = link
@@ -183,29 +258,8 @@
                         .style("stroke", "transparent")
                     ;
 
-                    function getArrowSelected(l) {
-                        return makeArrow("end-arrow-" + parseInt(l.target.radius) + "-selected", l.target.radius, true);
-                    }
-
                     var arrowSize = this.arrowSize;
-
-                    function makeArrow(id, radius, isSelected) {
-                        if (defs.selectAll("#" + id).empty()) {
-                            defs
-                                .append("marker")
-                                .attr("id", id)
-                                .attr("viewBox", "0 -5 10 10")
-                                .attr("refX", 0)
-                                .attr("markerWidth", arrowSize)
-                                .attr("markerHeight", arrowSize)
-                                .attr("orient", "auto")
-                                .append("path")
-                                .attr("d", "M0,-5L10,0L0,5")
-                                .attr("fill", colorScale(1))
-                                .attr("opacity", isSelected ? 1.0 : 0.25)
-                        }
-                        return "url(#" + id + ")"
-                    }
+                    var that = this;
 
                     var node = this.svg
                         .append("g")
@@ -221,10 +275,10 @@
                     node
                         .append("circle")
                         .attr("r", p => p.radius)
-                        .attr("fill", d => colorScale(d["referenced-n-times-local"]))
+                        .attr("fill", d => this.colorScale(d["referenced-n-times-local"]))
                         .attr("stroke", "black")
                         .attr("stroke-opacity", this.defaultStrokeOpacity)
-                        .style("filter", getFilter)
+                        .style("filter", this.getFilter)
                     ;
 
                     node
@@ -245,60 +299,6 @@
                         .style("opacity", this.defaultTextOpacity)
                     ;
 
-
-                    function getFilter(d) {
-                        return makeFilter("drop-shadow-" + parseInt(d["referenced-n-times-local"]), false);
-                    }
-
-                    function getFilterSelected(d) {
-                        return makeFilter("drop-shadow-" + parseInt(d["referenced-n-times-local"]) + "-selected", true);
-                    }
-
-                    // https://stackoverflow.com/questions/33878292/d3-set-filter-flood-color-based-on-data
-                    function makeFilter(id, isSelected) {
-                        if (defs.selectAll("#" + id).empty()) {
-                            var filter = defs
-                                .append("filter")
-                                .attr("id", id)
-                                .attr("height", "200%")
-                            ;
-
-                            filter
-                                .append("feGaussianBlur")
-                                .attr("in", "SourceAlpha")
-                                .attr("stdDeviation", isSelected ? 3 : 1)
-                                .attr("result", "blur")
-                            ;
-
-                            filter
-                                .append("feOffset")
-                                .attr("in", "blur")
-                                .attr("result", "offsetBlur")
-                            ;
-
-                            filter
-                                .append("feFlood")
-                                .attr("in", "offsetBlur")
-                                .attr("flood-color", isSelected ? colorScale(100) : shadowColorScale(0))
-                                .attr("flood-opacity", "1")
-                                .attr("result", "offsetColor")
-                            ;
-
-                            filter
-                                .append("feComposite")
-                                .attr("in", "offsetColor")
-                                .attr("in2", "offsetBlur")
-                                .attr("operator", "in")
-                                .attr("result", "offsetBlur")
-                            ;
-
-                            var feMerge = filter.append("feMerge");
-                            feMerge.append("feMergeNode").attr("in", "offsetBlur");
-                            feMerge.append("feMergeNode").attr("in", "SourceGraphic");
-                        }
-                        return "url(#" + id + ")"
-                    }
-
                     var linksData = this.linksData;
 
                     function isConnected(a, b) {
@@ -316,8 +316,11 @@
                     var hoverTransitionDuration = 250;
                     var isDragging = false;
 
-                    // http://bl.ocks.org/martinjc/396926c15afa2ab0127322a01d97b5f4
+                    var getFilterSelected = this.getFilterSelected;
+                    var getFilter = this.getFilter;
+
                     function fadeNode(fillOpacity, strokeOpacity, textOpacity, linkOpacity, isHoverMode) {
+                        // http://bl.ocks.org/martinjc/396926c15afa2ab0127322a01d97b5f4
                         return function (d) {
                             if (isDragging) {
                                 return;
@@ -392,10 +395,10 @@
 
                     force.on("tick", tickActions);
 
-                    var that = this;
                     var padding = this.padding;
                     var width = this.width;
                     var labelFontSizePixels = this.labelFontSizePixels;
+
                     function tickActions() {
                         node
                             .attr("cx", d => d.x = Math.max(d.radius + padding, Math.min(width - d.radius - padding, d.x)))
