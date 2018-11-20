@@ -28,8 +28,6 @@
             arrowSize: 4,
             hoverTransitionDuration: 250,
             isDragging: false,
-            colorScale: null,
-            shadowColorScale: null,
             force: null,
             nodesData: [
                 {
@@ -106,6 +104,25 @@
             },
             linkOffsetForArrow() {
                 return this.arrowSize * 4;
+            },
+            radiusScale() {
+                // must not be zero => + 1
+                return d3.scaleLog()
+                    .domain([this.minimumReferencedGlobal + 1, this.maximumReferencedGlobal + 1])
+                    .range([this.minimumRadius, this.maximumRadius]);
+            },
+            colorScale() {
+                return d3.scaleLinear()
+                    .domain([this.minimumReferencedLocal, this.maximumReferencedLocal])
+                    .range([this.colorMin, this.colorMax]);
+            },
+            shadowColorScale() {
+                return d3.scaleLinear()
+                    .domain([this.minimumReferencedLocal, this.maximumReferencedLocal])
+                    .range(["black", this.colorMax]);
+            },
+            yearHeight() {
+                return this.height / this.nYears;
             }
         },
         methods: {
@@ -215,28 +232,12 @@
                         return;
                     }
 
-                    var minimumReferencedGlobal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
-                    var maximumReferencedGlobal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
-                    var minimumReferencedLocal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
-                    var maximumReferencedLocal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
-                    var nYears = Math.max.apply(Math, this.nodesData.map(p => p["year"])) + 1;
-
-
-                    this.radiusScale = d3.scaleLog()
-                        .domain([minimumReferencedGlobal + 1, maximumReferencedGlobal + 1]) // must not be zero => + 1
-                        .range([this.minimumRadius, this.maximumRadius]);
-
-                    this.colorScale = d3.scaleLinear()
-                        .domain([minimumReferencedLocal, maximumReferencedLocal])
-                        .range([this.colorMin, this.colorMax]);
-
-                    this.shadowColorScale = d3.scaleLinear()
-                        .domain([minimumReferencedLocal, maximumReferencedLocal])
-                        .range(["black", this.colorMax]);
-
+                    this.minimumReferencedGlobal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
+                    this.maximumReferencedGlobal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
+                    this.minimumReferencedLocal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
+                    this.maximumReferencedLocal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
+                    this.nYears = Math.max.apply(Math, this.nodesData.map(p => p["year"])) + 1;
                     this.nodesData.forEach(p => p.radius = this.radiusScale(p["referenced-n-times-global"] + 1));
-
-                    var yearHeight = this.height / nYears;
 
                     this.force = d3
                         .forceSimulation()
@@ -247,6 +248,7 @@
                     ;
 
                     var force = this.force;
+
                     function forceEnd() {
                         force.force("collision_force", null);
                         force.force("position_force_Y", null);
@@ -257,7 +259,7 @@
                     this.force
                         .force("collision_force", d3.forceCollide(this.collisionRadius).strength(1))
                         .force("link_force", d3.forceLink(this.linksData).id(d => d.key).strength(0.1))
-                        .force("position_force_Y", d3.forceY(d => yearHeight * (d.year + 0.5)).strength(3))
+                        .force("position_force_Y", d3.forceY(d => this.yearHeight * (d.year + 0.5)).strength(3))
                         .force("position_force_X", d3.forceX(this.width / 2).strength(0.2))
                     ;
 
@@ -426,6 +428,7 @@
                     var width = this.width;
                     var labelFontSizePixels = this.labelFontSizePixels;
                     var linkOffsetForArrow = this.linkOffsetForArrow;
+                    var yearHeight = this.yearHeight;
 
                     function tickActions() {
                         node
