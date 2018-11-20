@@ -37,7 +37,7 @@
                     "date-created": "2018-09-01",
                     "referenced-n-times-global": 0,
                     "referenced-n-times-local": 0,
-                    "year": 2
+                    "year": 2018
                 },
                 {
                     "key": "B_friendly",
@@ -46,7 +46,7 @@
                     "date-created": "2018-04-23",
                     "referenced-n-times-global": 5,
                     "referenced-n-times-local": 0,
-                    "year": 2
+                    "year": 2018
                 },
                 {
                     "key": "F_young",
@@ -55,7 +55,7 @@
                     "date-created": "2016-02-16",
                     "referenced-n-times-global": 37,
                     "referenced-n-times-local": 1,
-                    "year": 1
+                    "year": 2016
                 },
                 {
                     "key": "C_another",
@@ -64,7 +64,7 @@
                     "date-created": "2016-12-05",
                     "referenced-n-times-global": 8,
                     "referenced-n-times-local": 0,
-                    "year": 1
+                    "year": 2016
                 },
                 {
                     "key": "D_old",
@@ -73,7 +73,7 @@
                     "date-created": "2013-04-01",
                     "referenced-n-times-global": 236,
                     "referenced-n-times-local": 2,
-                    "year": 0
+                    "year": 2013
                 },
                 {
                     "key": "E_older",
@@ -82,7 +82,7 @@
                     "date-created": "2012-08-13",
                     "referenced-n-times-global": 412,
                     "referenced-n-times-local": 1,
-                    "year": 0
+                    "year": 2012
                 }
             ],
             linksData: [
@@ -263,8 +263,12 @@
                     this.maximumReferencedGlobal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
                     this.minimumReferencedLocal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
                     this.maximumReferencedLocal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
-                    this.nYears = Math.max.apply(Math, this.nodesData.map(p => p["year"])) + 1;
                     this.nodesData.forEach(p => p.radius = this.radiusScale(p["referenced-n-times-global"] + 1));
+                    var minYear = Math.min.apply(Math, this.nodesData.map(p => p["year"]));
+                    var maxYear = Math.max.apply(Math, this.nodesData.map(p => p["year"]));
+                    this.nYears = maxYear - minYear + 1;
+                    this.nodesData.forEach(p => p.yearIndex = maxYear - p["year"]);
+                    console.log(this.nodesData);
 
                     this.force = d3
                         .forceSimulation()
@@ -278,7 +282,7 @@
                     this.force
                         .force("collision_force", d3.forceCollide(this.collisionRadius).strength(1))
                         .force("link_force", d3.forceLink(this.linksData).id(d => d.key).strength(0.1))
-                        .force("position_force_Y", d3.forceY(d => this.yearHeight * (d.year + 0.5)).strength(3))
+                        .force("position_force_Y", d3.forceY(d => this.yearHeight * (d.yearIndex + 0.5)).strength(3))
                         .force("position_force_X", d3.forceX(this.width / 2).strength(0.2))
                     ;
 
@@ -346,6 +350,17 @@
                         .style("font", "Roboto")
                         .text(d => d.title.length > this.maxTitleLength ? d.title.substring(0, this.maxTitleLength) + "…" : d.title)
                         .style("opacity", this.defaultTextOpacity)
+                    ;
+
+                    setTimeout(function () {
+                            node
+                                .filter(function (d, i) {
+                                    return i === 0 || i === 1;
+                                })
+                                .dispatch("mouseover");
+                                //.dispatchEvent(event);
+                        },
+                        5000)
                     ;
 
                     var hoverTransitionDuration = this.hoverTransitionDuration;
@@ -438,8 +453,8 @@
                     function tickActions() {
                         node
                             .attr("cx", d => d.x = Math.max(d.radius + padding, Math.min(width - d.radius - padding, d.x)))
-                            .attr("cy", d => d.y = Math.max(d.radius + padding + yearHeight * d.year,
-                                Math.min(yearHeight * (d.year + 1) - d.radius - labelFontSizePixels - 12, d.y)))
+                            .attr("cy", d => d.y = Math.max(d.radius + padding + yearHeight * d.yearIndex,
+                                Math.min(yearHeight * (d.yearIndex + 1) - d.radius - labelFontSizePixels - 12, d.y)))
                             .attr("transform", d => "translate(" + d.x + "," + d.y + ")")
                         ;
 
