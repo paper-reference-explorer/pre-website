@@ -179,8 +179,7 @@
                 }
                 return "url(#" + id + ")"
             },
-
-            drag_start: function (d) {
+            dragStart: function (d) {
                 if (!d3.event.active) {
                     this.force.alphaTarget(0.3).restart();
                 }
@@ -188,11 +187,11 @@
                 d.fx = d.x;
                 d.fy = d.y;
             },
-            drag_drag: function (d) {
+            dragDrag: function (d) {
                 d.fx = d3.event.x;
                 d.fy = d3.event.y;
             },
-            drag_end: function (d) {
+            dragEnd: function (d) {
                 if (!d3.event.active) {
                     this.force.alphaTarget(0);
                 }
@@ -484,9 +483,9 @@
 
                     var drag_handler = d3
                         .drag()
-                        .on("start", this.drag_start)
-                        .on("drag", this.drag_drag)
-                        .on("end", this.drag_end);
+                        .on("start", this.dragStart)
+                        .on("drag", this.dragDrag)
+                        .on("end", this.dragEnd);
 
                     drag_handler(node);
 
