@@ -140,9 +140,9 @@
 
     .empty-state {
         position: absolute !important;
-        margin-bottom: 325px;
+        margin-bottom: 350px;
         width: 350px !important;
-        opacity: 0.25;
+        opacity: 0.5;
     }
 
     .image-foreground {

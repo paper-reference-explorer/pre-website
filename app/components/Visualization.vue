@@ -92,6 +92,14 @@
                 {"source": "C_another", "target": "F_young"},
             ]
         }),
+        watch: {
+            force: {
+                handler: function (after, before) {
+                    console.log(after);
+                },
+                deep: true,
+            }
+        },
         computed: {
             viewBox() {
                 return "0 0 " + this.height + " " + this.width;
@@ -248,6 +256,9 @@
                         return;
                     }
 
+                    this.svg.selectAll("*").remove();
+                    this.svg = d3.select("svg");
+
                     this.minimumReferencedGlobal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
                     this.maximumReferencedGlobal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
                     this.minimumReferencedLocal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
@@ -261,6 +272,7 @@
                         .alpha(0.25)
                         .alphaMin(0.05)
                         .on("end", this.forceEnd)
+                        .on("tick", tickActions)
                     ;
 
                     this.force
@@ -293,8 +305,6 @@
                         .attr("stroke-width", 48)
                         .style("stroke", "transparent")
                     ;
-
-                    var arrowSize = this.arrowSize;
 
                     var node = this.svg
                         .append("g")
@@ -338,7 +348,7 @@
                         .style("opacity", this.defaultTextOpacity)
                     ;
 
-                    var hoverTransitionDuration = 250;
+                    var hoverTransitionDuration = this.hoverTransitionDuration;
                     var isDragging = isDragging;
 
                     var getFilterSelected = this.getFilterSelected;
@@ -418,9 +428,6 @@
                             ;
                         };
                     }
-
-
-                    this.force.on("tick", tickActions);
 
                     var padding = this.padding;
                     var width = this.width;
