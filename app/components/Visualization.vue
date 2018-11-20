@@ -30,6 +30,7 @@
             isDragging: false,
             colorScale: null,
             shadowColorScale: null,
+            force: null,
             nodesData: [
                 {
                     "key": "A_my",
@@ -99,6 +100,12 @@
             },
             defs() {
                 return this.svg.append("defs");
+            },
+            labelFontSizeString() {
+                return this.labelFontSizePixels + "px";
+            },
+            linkOffsetForArrow() {
+                return this.arrowSize * 4;
             }
         },
         methods: {
@@ -171,6 +178,27 @@
                         .attr("opacity", isSelected ? 1.0 : 0.25)
                 }
                 return "url(#" + id + ")"
+            },
+
+            drag_start: function (d) {
+                if (!d3.event.active) {
+                    this.force.alphaTarget(0.3).restart();
+                }
+                this.isDragging = true;
+                d.fx = d.x;
+                d.fy = d.y;
+            },
+            drag_drag: function (d) {
+                d.fx = d3.event.x;
+                d.fy = d3.event.y;
+            },
+            drag_end: function (d) {
+                if (!d3.event.active) {
+                    this.force.alphaTarget(0);
+                }
+                this.isDragging = false;
+                d.fx = null;
+                d.fy = null;
             }
         },
         mounted() {
@@ -194,11 +222,8 @@
                     var maximumReferencedLocal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
                     var nYears = Math.max.apply(Math, this.nodesData.map(p => p["year"])) + 1;
 
-                    var labelFontSizeString = this.labelFontSizePixels + "px",
-                        linkOffsetForArrow = this.arrowSize * 4
-                    ;
 
-                    var radiusScale = d3.scaleLog()
+                    this.radiusScale = d3.scaleLog()
                         .domain([minimumReferencedGlobal + 1, maximumReferencedGlobal + 1]) // must not be zero => + 1
                         .range([this.minimumRadius, this.maximumRadius]);
 
@@ -210,24 +235,27 @@
                         .domain([minimumReferencedLocal, maximumReferencedLocal])
                         .range(["black", this.colorMax]);
 
-                    this.nodesData.forEach(p => p.radius = radiusScale(p["referenced-n-times-global"] + 1));
+                    this.nodesData.forEach(p => p.radius = this.radiusScale(p["referenced-n-times-global"] + 1));
 
                     var yearHeight = this.height / nYears;
 
-                    var force = d3
+                    this.force = d3
                         .forceSimulation()
                         .nodes(this.nodesData)
                         .alpha(0.25)
                         .alphaMin(0.05)
-                        .on("end", function () {
-                            force.force("collision_force", null);
-                            force.force("position_force_Y", null);
-                            force.force("position_force_X", null);
-                            force.force("link_force", null);
-                        })
+                        .on("end", forceEnd)
                     ;
 
-                    force
+                    var force = this.force;
+                    function forceEnd() {
+                        force.force("collision_force", null);
+                        force.force("position_force_Y", null);
+                        force.force("position_force_X", null);
+                        force.force("link_force", null);
+                    }
+
+                    this.force
                         .force("collision_force", d3.forceCollide(this.collisionRadius).strength(1))
                         .force("link_force", d3.forceLink(this.linksData).id(d => d.key).strength(0.1))
                         .force("position_force_Y", d3.forceY(d => yearHeight * (d.year + 0.5)).strength(3))
@@ -293,7 +321,7 @@
                         .attr("dx", 0)
                         .attr("dy", d => d.radius + this.labelFontSizePixels + 4)
                         .style("text-anchor", "middle")
-                        .style("font-size", labelFontSizeString)
+                        .style("font-size", this.labelFontSizeString)
                         .style("font", "Roboto")
                         .text(d => d.title.length > this.maxTitleLength ? d.title.substring(0, this.maxTitleLength) + "…" : d.title)
                         .style("opacity", this.defaultTextOpacity)
@@ -314,7 +342,7 @@
                     }
 
                     var hoverTransitionDuration = 250;
-                    var isDragging = false;
+                    var isDragging = isDragging;
 
                     var getFilterSelected = this.getFilterSelected;
                     var getFilter = this.getFilter;
@@ -393,11 +421,12 @@
                     }
 
 
-                    force.on("tick", tickActions);
+                    this.force.on("tick", tickActions);
 
                     var padding = this.padding;
                     var width = this.width;
                     var labelFontSizePixels = this.labelFontSizePixels;
+                    var linkOffsetForArrow = this.linkOffsetForArrow;
 
                     function tickActions() {
                         node
@@ -455,34 +484,12 @@
 
                     var drag_handler = d3
                         .drag()
-                        .on("start", drag_start)
-                        .on("drag", drag_drag)
-                        .on("end", drag_end);
+                        .on("start", this.drag_start)
+                        .on("drag", this.drag_drag)
+                        .on("end", this.drag_end);
 
                     drag_handler(node);
 
-                    function drag_start(d) {
-                        if (!d3.event.active) {
-                            force.alphaTarget(0.3).restart();
-                        }
-                        isDragging = true;
-                        d.fx = d.x;
-                        d.fy = d.y;
-                    }
-
-                    function drag_drag(d) {
-                        d.fx = d3.event.x;
-                        d.fy = d3.event.y;
-                    }
-
-                    function drag_end(d) {
-                        if (!d3.event.active) {
-                            force.alphaTarget(0);
-                        }
-                        isDragging = false;
-                        d.fx = null;
-                        d.fy = null;
-                    }
                 },
                 {
                     deep: true
