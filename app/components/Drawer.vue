@@ -15,7 +15,10 @@
 
         <v-divider></v-divider>
 
-        <v-list subheader two-line>
+        <v-list
+            subheader
+            two-line
+        >
             <v-subheader>
                 <span
                     v-show="this.hasPapers"
@@ -49,7 +52,11 @@
                     <v-list-tile
                         :key="paper.title"
                         slot-scope="{ hover }"
+                        @click=""
+                        @mouseenter="$store.dispatch('setHover', paper.key)"
+                        @mouseleave="$store.dispatch('removeHover', paper.key)"
                     >
+                        <!-- @click is needed for gray hover effect -->
                         <v-list-tile-content>
                             <v-list-tile-title>{{ paper.title }}</v-list-tile-title>
                             <v-list-tile-sub-title>
@@ -96,5 +103,4 @@
 </script>
 
 <style scoped>
-
 </style>

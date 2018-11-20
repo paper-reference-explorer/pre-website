@@ -352,16 +352,30 @@
                         .style("opacity", this.defaultTextOpacity)
                     ;
 
-                    setTimeout(function () {
+
+                    this.$store.watch(
+                        (state) => {
+                            return this.$store.state.hoveredPapers;
+                        },
+                        (newValue, oldValue) => {
+                            if (newValue.length === 0) {
+                                node.dispatch("mouseout")
+                            }
                             node
                                 .filter(function (d, i) {
-                                    return i === 0 || i === 1;
+                                    for (var index = 0; index < newValue.length; index++) {
+                                        if (newValue[index] === d.key) {
+                                            return true;
+                                        }
+                                    }
+                                    return false;
                                 })
                                 .dispatch("mouseover");
-                                //.dispatchEvent(event);
                         },
-                        5000)
-                    ;
+                        {
+                            deep: true
+                        }
+                    );
 
                     var hoverTransitionDuration = this.hoverTransitionDuration;
                     var isDragging = isDragging;

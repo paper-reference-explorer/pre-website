@@ -26,7 +26,8 @@ var store = new Vuex.Store({
         addedPapers: [],
         isDrawerOpen: true,
         isAboutVisible: false,
-        isWaitingForGraph: false
+        isWaitingForGraph: false,
+        hoveredPapers: [],
     },
     mutations: {
         ADD_PAPER(state, paper) {
@@ -52,6 +53,18 @@ var store = new Vuex.Store({
         },
         SET_WAITING_FOR_GRAPH(state, value) {
             state.isWaitingForGraph = value;
+        },
+        SET_HOVER(state, key) {
+            if (!state.hoveredPapers.includes(key)) {
+                state.hoveredPapers.push(key);
+            }
+        },
+        REMOVE_HOVER(state, key) {
+            for(var index = 0; index < state.hoveredPapers.length; index++) {
+                if(state.hoveredPapers[index] === key) {
+                    state.hoveredPapers.splice(index, 1);
+                }
+            }
         }
     },
     actions: {
@@ -110,6 +123,13 @@ var store = new Vuex.Store({
         loadExample({commit}) {
             commit("SET_ADDED_PAPERS", addedPapersExample);
             commit("SET_GRAPH_PAPERS", graphPapersExample);
+        },
+        setHover({commit}, key) {
+            commit("SET_HOVER", key);
+        },
+        removeHover({commit}, key) {
+            // receive the key as well in case the next hover is triggered before remove is called
+            commit("REMOVE_HOVER", key);
         }
     }
 });
