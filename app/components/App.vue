@@ -134,10 +134,6 @@
         padding: 0 20px !important; /* icons should start at 20 */
     }
 
-    .information {
-        padding: 0 20px;
-    }
-
     .empty-state {
         position: absolute !important;
         margin-bottom: 350px;

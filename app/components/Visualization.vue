@@ -177,8 +177,6 @@
             }
         },
         mounted() {
-            this.svg = d3.select("svg");
-
             this.$store.watch(
                 (state) => {
                     return this.$store.state.graphPapers;
@@ -191,8 +189,8 @@
                         return;
                     }
 
+                    this.svg = d3.select("svg#visualization");
                     this.svg.selectAll("*").remove();
-                    this.svg = d3.select("svg");
 
                     this.nodesData.forEach(p => p.radius = this.radiusScale(p["referenced-n-times-global"] + 1));
                     var minYear = Math.min.apply(Math, this.nodesData.map(p => p["year"]));
