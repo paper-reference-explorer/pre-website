@@ -6,6 +6,7 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     import * as d3 from "d3";
 
     export default {
@@ -14,11 +15,7 @@
             svg: null,
             width: 0,
             height: 0,
-            minimumRadius: 20,
-            maximumRadius: 50,
             padding: 8,
-            colorMin: "white",
-            colorMax: "#9C27B0",
             maxTitleLength: 20,
             collisionRadius: 100,
             hoverRadius: 100,
@@ -29,68 +26,6 @@
             hoverTransitionDuration: 250,
             isDragging: false,
             force: null,
-            nodesData: [
-                {
-                    "key": "A_my",
-                    "authors": "A et al.",
-                    "title": "My first paper",
-                    "date-created": "2018-09-01",
-                    "referenced-n-times-global": 0,
-                    "referenced-n-times-local": 0,
-                    "year": 2018
-                },
-                {
-                    "key": "B_friendly",
-                    "authors": "B et al.",
-                    "title": "Friendly paper",
-                    "date-created": "2018-04-23",
-                    "referenced-n-times-global": 5,
-                    "referenced-n-times-local": 0,
-                    "year": 2018
-                },
-                {
-                    "key": "F_young",
-                    "authors": "F et al.",
-                    "title": "Young paper",
-                    "date-created": "2016-02-16",
-                    "referenced-n-times-global": 37,
-                    "referenced-n-times-local": 1,
-                    "year": 2016
-                },
-                {
-                    "key": "C_another",
-                    "authors": "C et al.",
-                    "title": "Another friendly paper",
-                    "date-created": "2016-12-05",
-                    "referenced-n-times-global": 8,
-                    "referenced-n-times-local": 0,
-                    "year": 2016
-                },
-                {
-                    "key": "D_old",
-                    "authors": "D et al.",
-                    "title": "Old paper",
-                    "date-created": "2013-04-01",
-                    "referenced-n-times-global": 236,
-                    "referenced-n-times-local": 2,
-                    "year": 2013
-                },
-                {
-                    "key": "E_older",
-                    "authors": "E et al.",
-                    "title": "Older paper",
-                    "date-created": "2012-08-13",
-                    "referenced-n-times-global": 412,
-                    "referenced-n-times-local": 1,
-                    "year": 2012
-                }
-            ],
-            linksData: [
-                {"source": "A_my", "target": "D_old"},
-                {"source": "B_friendly", "target": "D_old"},
-                {"source": "B_friendly", "target": "E_older"},
-                {"source": "C_another", "target": "F_young"},
-            ]
         }),
         watch: {
             force: {
@@ -101,6 +36,22 @@
             }
         },
         computed: {
+            // ...mapState(["nodesData", "linksData", "radiusScale", "shadowColorScale", "shadowColorScale"])
+            nodesData() {
+                return this.$store.state.nodesData;
+            },
+            linksData() {
+                return this.$store.state.linksData;
+            },
+            radiusScale() {
+                return this.$store.state.radiusScale;
+            },
+            colorScale() {
+                return this.$store.state.colorScale;
+            },
+            shadowColorScale() {
+                return this.$store.state.shadowColorScale;
+            },
             viewBox() {
                 return "0 0 " + this.height + " " + this.width;
             },
@@ -112,22 +63,6 @@
             },
             linkOffsetForArrow() {
                 return this.arrowSize * 4;
-            },
-            radiusScale() {
-                // must not be zero => + 1
-                return d3.scaleLog()
-                    .domain([this.minimumReferencedGlobal + 1, this.maximumReferencedGlobal + 1])
-                    .range([this.minimumRadius, this.maximumRadius]);
-            },
-            colorScale() {
-                return d3.scaleLinear()
-                    .domain([this.minimumReferencedLocal, this.maximumReferencedLocal])
-                    .range([this.colorMin, this.colorMax]);
-            },
-            shadowColorScale() {
-                return d3.scaleLinear()
-                    .domain([this.minimumReferencedLocal, this.maximumReferencedLocal])
-                    .range(["black", this.colorMax]);
             },
             yearHeight() {
                 return this.height / this.nYears;
@@ -259,10 +194,6 @@
                     this.svg.selectAll("*").remove();
                     this.svg = d3.select("svg");
 
-                    this.minimumReferencedGlobal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
-                    this.maximumReferencedGlobal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-global"]));
-                    this.minimumReferencedLocal = Math.min.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
-                    this.maximumReferencedLocal = Math.max.apply(Math, this.nodesData.map(p => p["referenced-n-times-local"]));
                     this.nodesData.forEach(p => p.radius = this.radiusScale(p["referenced-n-times-global"] + 1));
                     var minYear = Math.min.apply(Math, this.nodesData.map(p => p["year"]));
                     var maxYear = Math.max.apply(Math, this.nodesData.map(p => p["year"]));

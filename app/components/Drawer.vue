@@ -7,11 +7,7 @@
         v-model="isOpen"
     > <!-- 320 (title width) + 6 (toolbar padding) = 326 -->
         <v-subheader>Information</v-subheader>
-        <p class="information">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea,
-            nostrum odio. Dolores, sed accusantium quasi non, voluptas eius illo quas,
-            saepe voluptate pariatur in deleniti minus sint. Excepturi.
-        </p>
+        <Information></Information>
 
         <v-divider></v-divider>
 
@@ -81,8 +77,11 @@
 </template>
 
 <script>
+    import Information from "./Information.vue";
+
     export default {
         name: "Drawer",
+        components: {Information},
         computed: {
             isOpen: {
                 get: function () {
