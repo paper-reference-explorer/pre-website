@@ -29,12 +29,11 @@ function updateReferencedNumbers(state) {
     state.maximumReferencedGlobal = Math.max.apply(Math, globalNumbers);
     state.minimumReferencedLocal = Math.min.apply(Math, localNumbers);
     state.maximumReferencedLocal = Math.max.apply(Math, localNumbers);
-    console.log(globalNumbers);
+
     // must not be zero => + 1
     state.radiusScale = d3.scaleLog()
         .domain([state.minimumReferencedGlobal + 1, state.maximumReferencedGlobal + 1])
         .range([constants.minimumRadius, constants.maximumRadius]);
-    console.log(state.radiusScale);
     state.colorScale = d3.scaleLinear()
         .domain([state.minimumReferencedLocal, state.maximumReferencedLocal])
         .range([constants.colorMin, constants.colorMax]);

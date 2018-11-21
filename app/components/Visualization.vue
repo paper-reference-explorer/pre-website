@@ -199,7 +199,6 @@
                     var maxYear = Math.max.apply(Math, this.nodesData.map(p => p["year"]));
                     this.nYears = maxYear - minYear + 1;
                     this.nodesData.forEach(p => p.yearIndex = maxYear - p["year"]);
-                    console.log(this.nodesData);
 
                     this.force = d3
                         .forceSimulation()

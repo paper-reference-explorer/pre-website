@@ -7,8 +7,13 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex';
+
     export default {
-        name: "Information"
+        name: "Information",
+        computed: mapState(["minimumReferencedGlobal", "maximumReferencedGlobal",
+            "minimumReferencedGlobal", "maximumReferencedGlobal",
+            "radiusScale", "shadowColorScale", "shadowColorScale"])
     }
 </script>
 
