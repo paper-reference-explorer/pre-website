@@ -45,7 +45,7 @@
         },
         methods: {
             querySelections(query) {
-                this.loading = true;
+                this.loading = "#FF9800"; // accent color
                 var parameters = {
                     "search_request": {
                         "query": {
