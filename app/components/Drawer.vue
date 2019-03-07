@@ -7,15 +7,14 @@
         v-model="isOpen"
     > <!-- 320 (title width) + 6 (toolbar padding) = 326 -->
         <v-subheader>Information</v-subheader>
-        <p class="information">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Optio itaque ea,
-            nostrum odio. Dolores, sed accusantium quasi non, voluptas eius illo quas,
-            saepe voluptate pariatur in deleniti minus sint. Excepturi.
-        </p>
+        <Information></Information>
 
         <v-divider></v-divider>
 
-        <v-list subheader two-line>
+        <v-list
+            subheader
+            two-line
+        >
             <v-subheader>
                 <span
                     v-show="this.hasPapers"
@@ -49,7 +48,11 @@
                     <v-list-tile
                         :key="paper.title"
                         slot-scope="{ hover }"
+                        @click=""
+                        @mouseenter="$store.dispatch('setHover', paper.key)"
+                        @mouseleave="$store.dispatch('removeHover', paper.key)"
                     >
+                        <!-- @click is needed for gray hover effect -->
                         <v-list-tile-content>
                             <v-list-tile-title>{{ paper.title }}</v-list-tile-title>
                             <v-list-tile-sub-title>
@@ -74,8 +77,11 @@
 </template>
 
 <script>
+    import Information from "./Information.vue";
+
     export default {
         name: "Drawer",
+        components: {Information},
         computed: {
             isOpen: {
                 get: function () {
@@ -96,5 +102,4 @@
 </script>
 
 <style scoped>
-
 </style>

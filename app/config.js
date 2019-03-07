@@ -1,6 +1,9 @@
 var constants = {
-    minimumSize: 2,
-    maximumSize: 8
+    colorMin: "white",
+    colorMax: "#9C27B0",
+    colorShadowMin: "black",
+    minimumRadius: 20,
+    maximumRadius: 50,
 };
 
 export {constants};

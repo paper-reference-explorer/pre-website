@@ -1,7 +1,9 @@
 import Vue from 'vue';
 import Vuex from "vuex";
 import axios from 'axios';
-import {addedPapersExample, graphPapersExample} from './example-data.js';
+import {addedPapersExample, graphPapersExample, nodesData, linksData} from './example-data.js';
+import {constants} from "./config";
+import * as d3 from "d3";
 
 Vue.use(Vuex);
 
@@ -20,13 +22,43 @@ function updateReferences(addedPapers, successFunction, errorFunction, finalFunc
         });
 }
 
+function updateReferencedNumbers(state) {
+    var globalNumbers = state.nodesData.map(p => p["referenced-n-times-global"]);
+    var localNumbers = state.nodesData.map(p => p["referenced-n-times-local"]);
+    state.minimumReferencedGlobal = Math.min.apply(Math, globalNumbers);
+    state.maximumReferencedGlobal = Math.max.apply(Math, globalNumbers);
+    state.minimumReferencedLocal = Math.min.apply(Math, localNumbers);
+    state.maximumReferencedLocal = Math.max.apply(Math, localNumbers);
+
+    // must not be zero => + 1
+    state.radiusScale = d3.scaleLog()
+        .domain([state.minimumReferencedGlobal + 1, state.maximumReferencedGlobal + 1])
+        .range([constants.minimumRadius, constants.maximumRadius]);
+    state.colorScale = d3.scaleLinear()
+        .domain([state.minimumReferencedLocal, state.maximumReferencedLocal])
+        .range([constants.colorMin, constants.colorMax]);
+    state.shadowColorScale = d3.scaleLinear()
+        .domain([state.minimumReferencedLocal, state.maximumReferencedLocal])
+        .range([constants.colorShadowMin, constants.colorMax]);
+}
+
 var store = new Vuex.Store({
     state: {
         graphPapers: [],
         addedPapers: [],
         isDrawerOpen: true,
         isAboutVisible: false,
-        isWaitingForGraph: false
+        isWaitingForGraph: false,
+        nodesData: [],
+        linksData: [],
+        hoveredPapers: [],
+        minimumReferencedGlobal: -1,
+        maximumReferencedGlobal: -1,
+        minimumReferencedLocal: -1,
+        maximumReferencedLocal: -1,
+        radiusScale: [],
+        colorScale: [],
+        shadowColorScale: [],
     },
     mutations: {
         ADD_PAPER(state, paper) {
@@ -43,6 +75,9 @@ var store = new Vuex.Store({
         },
         SET_GRAPH_PAPERS(state, graphPapers) {
             state.graphPapers = graphPapers;
+            state.nodesData = nodesData;
+            state.linksData = linksData;
+            updateReferencedNumbers(state);
         },
         SET_DRAWER_STATUS(state, value) {
             state.isDrawerOpen = value;
@@ -52,6 +87,18 @@ var store = new Vuex.Store({
         },
         SET_WAITING_FOR_GRAPH(state, value) {
             state.isWaitingForGraph = value;
+        },
+        SET_HOVER(state, key) {
+            if (!state.hoveredPapers.includes(key)) {
+                state.hoveredPapers.push(key);
+            }
+        },
+        REMOVE_HOVER(state, key) {
+            for (var index = 0; index < state.hoveredPapers.length; index++) {
+                if (state.hoveredPapers[index] === key) {
+                    state.hoveredPapers.splice(index, 1);
+                }
+            }
         }
     },
     actions: {
@@ -110,6 +157,13 @@ var store = new Vuex.Store({
         loadExample({commit}) {
             commit("SET_ADDED_PAPERS", addedPapersExample);
             commit("SET_GRAPH_PAPERS", graphPapersExample);
+        },
+        setHover({commit}, key) {
+            commit("SET_HOVER", key);
+        },
+        removeHover({commit}, key) {
+            // receive the key as well in case the next hover is triggered before remove is called
+            commit("REMOVE_HOVER", key);
         }
     }
 });
