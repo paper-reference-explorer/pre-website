@@ -9,7 +9,7 @@ The explorer gives you an overview on all papers your given papers are referenci
 - number of times a paper was referenced by your paper
 - visually highlight papers that are more important for your added papers
 
-![screenshot of the homepage](homepage.png "screenshot of the homepage")
+![current website](website.gif "current website")
 
 ## Dev
 
