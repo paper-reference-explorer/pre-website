@@ -1,27 +1,21 @@
-.PHONY: build clean dev prod prod-local
+.PHONY: build clean up
+all: clean build up
+
+TARGET = dev
+DOCKER_COMPOSE = sudo docker-compose -f docker-compose-files/docker-compose.prod.yml
+ifeq ($(strip $(TARGET)),prod-local)
+    DOCKER_COMPOSE += -f docker-compose-files/docker-compose.prod.local.yml
+endif
+ifeq ($(strip $(TARGET)),dev)
+    DOCKER_COMPOSE += -f docker-compose-files/docker-compose.prod.local.yml
+    DOCKER_COMPOSE += -f docker-compose-files/docker-compose.dev.yml
+endif
 
 build:
-	sudo docker-compose -f docker-compose-files/docker-compose.prod.yml \
--f docker-compose-files/docker-compose.prod.local.yml -f docker-compose-files/docker-compose.dev.yml build
-# 	sudo docker-compose -f docker-compose-files/docker-compose.prod.yml \
-# -f docker-compose-files/docker-compose.prod.local.yml build
+	$(DOCKER_COMPOSE) build
 
 clean:
-	sudo docker-compose -f docker-compose-files/docker-compose.prod.yml \
--f docker-compose-files/docker-compose.prod.local.yml -f docker-compose-files/docker-compose.dev.yml rm
+	$(DOCKER_COMPOSE) rm -f
 
-dev:
-	sudo docker-compose -f docker-compose-files/docker-compose.prod.yml \
--f docker-compose-files/docker-compose.prod.local.yml -f docker-compose-files/docker-compose.dev.yml up \
---abort-on-container-exit website
-
-logs:
-	sudo docker-compose -f docker-compose-files/docker-compose.prod.yml \
--f docker-compose-files/docker-compose.prod.local.yml -f docker-compose-files/docker-compose.dev.yml logs
-
-prod:
-	sudo docker-compose -f docker-compose-files/docker-compose.prod.yml up
-
-prod-local:
-	sudo docker-compose -f docker-compose-files/docker-compose.prod.yml \
--f docker-compose-files/docker-compose.prod.local.yml up
+up:
+	$(DOCKER_COMPOSE) up
