@@ -7,23 +7,23 @@ services:
             - "--defaultentrypoints=http"
             - "--docker"
             - "--docker.domain=localhost"
+        networks:
+            - public-access
         ports:
             - 80:80
             - 8080:8080
         volumes:
             - /var/run/docker.sock:/var/run/docker.sock
-        networks:
-          - public-access
     search:
         labels:
-            - "traefik.pre.frontend.rule=Host:pre.localhost;Method:Post;Path:/rest/_search"
+            - "traefik.pre.frontend.rule=Host:www.pre.localhost;Method:Post;Path:/rest/_search"
     website:
         build:
-            context: .
+            context: ..
             target: prod
             network: host
         labels:
-            - "traefik.pre.frontend.rule=Host:pre.localhost"
+            - "traefik.pre.frontend.rule=Host:www.pre.localhost"
 networks:
   public-access:
     driver: bridge
