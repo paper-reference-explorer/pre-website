@@ -34,3 +34,22 @@ export interface Link {
   source: PaperKey
   target: PaperKey
 }
+
+export interface SearchResult {
+  id: string
+  fields: {
+    authors: string
+    title: string
+    year: string
+  }
+}
+
+export interface SearchItem {
+  paper: {
+    key: string
+    year: string
+    authors: string
+    title: string
+  }
+  description: string
+}

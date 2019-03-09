@@ -22,7 +22,7 @@
       </span>
     </v-toolbar-title>
 
-    <!-- <Search></Search> -->
+    <Search></Search>
 
     <v-spacer></v-spacer>
 
@@ -97,11 +97,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import Search from '@/components/Search.vue';
 import Drawer from '@/components/Drawer.vue';
 import About from '@/components/About.vue';
 
 @Component({
   components: {
+    Search,
     Drawer,
     About,
   },
