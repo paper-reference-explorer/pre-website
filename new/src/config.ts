@@ -6,4 +6,4 @@ const constants = {
   maximumRadius: 50,
 };
 
-export default { constants };
+export default constants;
