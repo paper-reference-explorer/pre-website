@@ -16,16 +16,16 @@
     two-line
   >
     <v-subheader>
-              <span
-                v-show="this.hasPapers"
-              >
-                  Added papers
-              </span>
+      <span
+        v-show="this.hasPapers"
+      >
+        Added papers
+      </span>
       <span
         v-show="!this.hasPapers"
       >
-                  No papers added yet
-              </span>
+        No papers added yet
+      </span>
 
       <v-spacer></v-spacer>
 
@@ -42,34 +42,34 @@
     <template
       v-for="(paper, index) in this.addedPapers"
     >
-      <v-hover
-        close-delay="0"
-        :key="paper.key"
+    <v-hover
+      close-delay="0"
+      :key="paper.key"
+    >
+      <v-list-tile
+        slot-scope="{ hover }"
+        @mouseenter="$store.dispatch('setHover', paper.key)"
+        @mouseleave="$store.dispatch('removeHover', paper.key)"
       >
-        <v-list-tile
-          slot-scope="{ hover }"
-          @mouseenter="$store.dispatch('setHover', paper.key)"
-          @mouseleave="$store.dispatch('removeHover', paper.key)"
-        >
-          <!-- @click is needed for gray hover effect -->
-          <v-list-tile-content>
-            <v-list-tile-title>{{ paper.title }}</v-list-tile-title>
-            <v-list-tile-sub-title>
-              {{ paper.year }} - {{ paper.authors }}
-            </v-list-tile-sub-title>
-          </v-list-tile-content>
+        <!-- @click is needed for gray hover effect -->
+        <v-list-tile-content>
+          <v-list-tile-title>{{ paper.title }}</v-list-tile-title>
+          <v-list-tile-sub-title>
+            {{ paper.year }} - {{ paper.authors }}
+          </v-list-tile-sub-title>
+        </v-list-tile-content>
 
-          <v-list-tile-action>
-            <v-btn
-              v-if="hover"
-              icon
-              @click="$store.dispatch('removePaper', index)"
-            >
-              <v-icon>delete</v-icon>
-            </v-btn>
-          </v-list-tile-action>
-        </v-list-tile>
-      </v-hover>
+        <v-list-tile-action>
+          <v-btn
+            v-if="hover"
+            icon
+            @click="$store.dispatch('removePaper', index)"
+          >
+            <v-icon>delete</v-icon>
+          </v-btn>
+        </v-list-tile-action>
+      </v-list-tile>
+    </v-hover>
     </template>
   </v-list>
 </v-navigation-drawer>

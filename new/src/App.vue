@@ -18,8 +18,8 @@
       <span
         class="hidden-sm-and-down"
       >
-                    Paper references explorer
-                </span>
+        Paper references explorer
+      </span>
     </v-toolbar-title>
 
     <!-- <Search></Search> -->
