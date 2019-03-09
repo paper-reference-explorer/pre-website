@@ -1,29 +1,145 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+<v-app id="app">
+  <Drawer></Drawer>
+
+  <v-toolbar
+    :clipped-left="$vuetify.breakpoint.lgAndUp"
+    dark
+    color="primary"
+    app
+    fixed
+    extended
+    :extension-height="extensionHeight"
+  >
+    <v-toolbar-title>
+      <v-toolbar-side-icon
+        @click.stop="$store.dispatch('toggleDrawerStatus')"
+      ></v-toolbar-side-icon>
+      <span
+        class="hidden-sm-and-down"
+      >
+                    Paper references explorer
+                </span>
+    </v-toolbar-title>
+
+    <!-- <Search></Search> -->
+
+    <v-spacer></v-spacer>
+
+    <v-btn
+      icon
+      @click="$store.dispatch('openAbout')"
+    >
+      <v-icon>help</v-icon>
+    </v-btn>
+
+    <v-progress-linear
+      v-show="$store.state.isWaitingForGraph"
+      slot="extension"
+      :indeterminate="true"
+      :height="extensionHeight"
+      color="accent"
+    ></v-progress-linear>
+  </v-toolbar>
+
+  <v-content>
+    <v-container
+      v-show="$store.state.graphPapers.length === 0"
+      fluid
+      fill-height
+    >
+      <v-layout
+        align-center
+        justify-center
+        column
+      >
+        <v-img
+          :src="require('@/assets/empty_state.png')"
+          contain
+          class="empty-state"
+        ></v-img>
+        <div
+          class="image-foreground text-xs-center"
+        >
+          <p class="font-weight-light display-1 text-xs-center">
+            Search for some papers to get started
+          </p>
+
+          <p class="font-weight-light title">or</p>
+
+          <v-btn
+            color="primary"
+            @click="$store.dispatch('loadExample')"
+          >
+            view example
+          </v-btn>
+        </div>
+      </v-layout>
+    </v-container>
+
+    <v-container
+      v-show="$store.state.graphPapers.length > 0"
+      fill-height
+    >
+      <v-layout
+        align-center
+        justify-center
+        column
+      >
+        <!-- <Visualization></Visualization> -->
+      </v-layout>
+    </v-container>
+  </v-content>
+
+  <About></About>
+</v-app>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import Drawer from '@/components/Drawer.vue';
+import About from '@/components/About.vue';
+
+@Component({
+  components: {
+    Drawer,
+    About,
+  },
+})
+export default class Home extends Vue {
+  @Prop() source!: string;
+
+  extensionHeight = 4;
 }
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
+</script>
+
+<style lang="scss">
+.v-toolbar__content {
+  /* extensionHeight (top)
+  /* (6 + 12) (button margin) + 8 (icon specific margin) - 20 (icons should start at) = 6 (left)*/
+  padding: 4px 20px 0 6px !important;
+}
+
+.v-toolbar__title {
+  width: 320px !important;
+}
+
+.v-toolbar__extension {
+  padding: 0 !important;
+}
+
+.v-list__tile {
+  padding: 0 20px !important; /* icons should start at 20 */
+}
+
+.empty-state {
+  position: absolute !important;
+  margin-bottom: 350px;
+  width: 350px !important;
+  opacity: 0.5;
+}
+
+.image-foreground {
+  z-index: 1;
 }
 </style>
