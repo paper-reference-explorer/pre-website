@@ -1,0 +1,4 @@
+.git
+search
+**/node_modules
+**/dist
