@@ -1,0 +1,30 @@
+version: '3.7'
+services:
+    reverse-proxy:
+        image: traefik:latest
+        command:
+            - "--api"
+            - "--defaultentrypoints=http"
+            - "--docker"
+            - "--docker.domain=localhost"
+        networks:
+            - public-access
+        ports:
+            - 80:80
+            - 8080:8080
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+    search:
+        labels:
+            - "traefik.pre.frontend.rule=Host:www.pre.localhost;Method:Post;Path:/rest/_search"
+    website:
+        build:
+            context: ..
+            target: prod
+            network: host
+        labels:
+            - "traefik.pre.frontend.rule=Host:www.pre.localhost"
+networks:
+  public-access:
+    driver: bridge
+    name: public-access

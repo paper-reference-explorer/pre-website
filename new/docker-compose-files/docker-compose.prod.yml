@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+    search:
+        image: mosuka/blast:v0.3.2
+        command: start
+        environment:
+            BLAST_BIND_ADDR: search:10000
+            BLAST_GRPC_ADDR: search:10001
+            BLAST_HTTP_ADDR: search:10002
+            BLAST_RAFT_NODE_ID: node1
+            BLAST_RAFT_DIR: /search/node1/raft
+            BLAST_STORE_DIR: /search/node1/store
+            BLAST_INDEX_DIR: /search/node1/index
+            BLAST_INDEX_MAPPING: /search/index_mapping.json
+        labels:
+            - "traefik.enable=true"
+            - "traefik.pre.port=10002"
+            - "traefik.pre.frontend.rule=Host:pre.klausondrag.com;Method:Post;Path:/rest/_search"
+        networks:
+            - public-access
+        restart: always
+        volumes:
+            - ../search:/search
+    website:
+        image: paper-references-explorer-website_website:latest
+        labels:
+            - "traefik.enable=true"
+            - "traefik.pre.port=80"
+            - "traefik.pre.frontend.rule=Host:pre.klausondrag.com"
+        networks:
+            - public-access
+        restart: always
+networks:
+    public-access:
+        external:
+            name: public-access

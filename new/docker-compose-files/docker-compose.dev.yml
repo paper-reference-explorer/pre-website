@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+    website:
+        build:
+            target: dev
+        labels:
+            - "traefik.pre.port=8080"
+        volumes:
+            - ../app:/usr/src/app/app
+            - ../index.ejs:/usr/src/app/index.ejs
+
