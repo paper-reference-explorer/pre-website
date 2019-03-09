@@ -12,6 +12,9 @@ The explorer gives you an overview on all papers your given papers are referenci
 ![current website](website.gif "current website")
 
 ## Dev
+If you use webstorm then you should make sure your formatter is setup correctly.
+This can be done the following way: Settings -> Editor -> Code Style -> HTML -> Other -> Do not indent children of 
+-> Add `template,script,style` to the list
 
 ### Docker
 #### Setup
