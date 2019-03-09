@@ -2,9 +2,12 @@ import Vue from 'vue';
 import Vuex, { Commit } from 'vuex';
 import axios from 'axios';
 import { ScaleContinuousNumeric, scaleLinear, scaleLog } from 'd3-scale';
-import constants from './config';
-import exampleData from './example-data';
-import { PaperKey, Paper, Node, Link, YearData } from '@/typings';
+import constants from '@/config';
+import exampleData from '@/example-data';
+// PaperKey must not be first for some reason
+import {
+  Paper, Node, Link, PaperKey, YearData,
+} from '@/typings.d';
 
 Vue.use(Vuex);
 
@@ -16,7 +19,8 @@ function updateReferences(addedPapers: Paper[], commit: Commit) {
       commit('SET_GRAPH_PAPERS', graphPapers);
     })
     .catch((error) => {
-      console.log(error);
+      // eslint-disable-next-line no-console
+      console.error(error);
     })
     .then(() => {
       commit('SET_WAITING_FOR_GRAPH', false);
@@ -41,7 +45,7 @@ interface StoreData {
   shadowColorScale?: ScaleContinuousNumeric<string, string>
 }
 
-/* eslint no-param-reassign: [2, { "props": false }] */
+/* eslint-disable no-param-reassign */
 export default new Vuex.Store<StoreData>({
   state: {
     graphPapers: [],

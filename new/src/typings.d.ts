@@ -1,4 +1,6 @@
-export type PaperKey = string;
+type PaperKey = string;
+// export type ... does not work!
+export { PaperKey };
 
 export interface Paper {
   key: PaperKey

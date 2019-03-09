@@ -1,4 +1,6 @@
-import { Paper, Node, Link, YearData } from '@/typings';
+import {
+  Paper, Node, Link, YearData,
+} from '@/typings.d';
 
 interface ExampleData {
   addedPapersExample: Paper[]
