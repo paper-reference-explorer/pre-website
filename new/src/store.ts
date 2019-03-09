@@ -65,19 +65,19 @@ export default new Vuex.Store<StoreData>({
     shadowColorScale: undefined,
   },
   mutations: {
-    ADD_PAPER(state, paper) {
+    ADD_PAPER(state: StoreData, paper: Paper) {
       state.addedPapers.push(paper);
     },
-    REMOVE_PAPER(state, index) {
+    REMOVE_PAPER(state: StoreData, index: number) {
       state.addedPapers.splice(index, 1);
     },
-    REMOVE_ALL_PAPERS(state) {
+    REMOVE_ALL_PAPERS(state: StoreData) {
       state.addedPapers = [];
     },
-    SET_ADDED_PAPERS(state, addedPapers) {
+    SET_ADDED_PAPERS(state: StoreData, addedPapers: Paper[]) {
       state.addedPapers = addedPapers;
     },
-    SET_GRAPH_PAPERS(state, graphPapers: YearData[]) {
+    SET_GRAPH_PAPERS(state: StoreData, graphPapers: YearData[]) {
       state.graphPapers = graphPapers;
       state.nodesData = exampleData.nodesData;
       state.linksData = exampleData.linksData;
@@ -100,21 +100,21 @@ export default new Vuex.Store<StoreData>({
         .domain([state.minimumReferencedLocal, state.maximumReferencedLocal])
         .range([constants.colorShadowMin, constants.colorMax]);
     },
-    SET_DRAWER_STATUS(state, value) {
+    SET_DRAWER_STATUS(state: StoreData, value: boolean) {
       state.isDrawerOpen = value;
     },
-    SET_ABOUT_STATUS(state, value) {
+    SET_ABOUT_STATUS(state: StoreData, value: boolean) {
       state.isAboutVisible = value;
     },
-    SET_WAITING_FOR_GRAPH(state, value) {
+    SET_WAITING_FOR_GRAPH(state: StoreData, value: boolean) {
       state.isWaitingForGraph = value;
     },
-    SET_HOVER(state, key: string) {
+    SET_HOVER(state: StoreData, key: PaperKey) {
       if (!state.hoveredPapers.includes(key)) {
         state.hoveredPapers.push(key);
       }
     },
-    REMOVE_HOVER(state, key) {
+    REMOVE_HOVER(state: StoreData, key: PaperKey) {
       for (let index = 0; index < state.hoveredPapers.length; index += 1) {
         if (state.hoveredPapers[index] === key) {
           state.hoveredPapers.splice(index, 1);
@@ -123,12 +123,12 @@ export default new Vuex.Store<StoreData>({
     },
   },
   actions: {
-    addPaper({ commit, state }, paper) {
+    addPaper({ commit, state }, paper: Paper) {
       commit('ADD_PAPER', paper);
       commit('SET_WAITING_FOR_GRAPH', true);
       updateReferences(state.addedPapers, commit);
     },
-    removePaper({ commit, state }, index) {
+    removePaper({ commit, state }, index: number) {
       commit('REMOVE_PAPER', index);
       if (state.addedPapers.length === 0) {
         commit('SET_GRAPH_PAPERS', []);
@@ -141,7 +141,7 @@ export default new Vuex.Store<StoreData>({
       commit('REMOVE_ALL_PAPERS');
       commit('SET_GRAPH_PAPERS', []);
     },
-    setDrawerStatus({ commit }, value) {
+    setDrawerStatus({ commit }, value: boolean) {
       commit('SET_DRAWER_STATUS', value);
     },
     toggleDrawerStatus({ commit, state }) {
@@ -149,7 +149,7 @@ export default new Vuex.Store<StoreData>({
       const newValue = !oldValue;
       commit('SET_DRAWER_STATUS', newValue);
     },
-    setAboutStatus({ commit }, value) {
+    setAboutStatus({ commit }, value: boolean) {
       commit('SET_ABOUT_STATUS', value);
     },
     openAbout({ commit }) {
@@ -159,10 +159,10 @@ export default new Vuex.Store<StoreData>({
       commit('SET_ADDED_PAPERS', exampleData.addedPapersExample);
       commit('SET_GRAPH_PAPERS', exampleData.graphPapersExample);
     },
-    setHover({ commit }, key) {
+    setHover({ commit }, key: PaperKey) {
       commit('SET_HOVER', key);
     },
-    removeHover({ commit }, key) {
+    removeHover({ commit }, key: PaperKey) {
       // receive the key as well in case the next hover is triggered before remove is called
       commit('REMOVE_HOVER', key);
     },
